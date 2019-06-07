@@ -6,4 +6,6 @@
     <string name="sound_control">Sound</string>
     <string name="number_of_strings">Number of Goal(s) : </string>
     <string name="number_of_movements">Number of Movements : </string>
+    <string name="board_block">This is a clickable board block</string>
+    <string name="empty_block">This is an empty block, cannot move to here</string>
 </resources>

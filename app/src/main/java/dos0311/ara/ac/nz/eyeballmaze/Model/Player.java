@@ -61,12 +61,21 @@ public class Player {
     }
 
     //	checking whether its a goal or not, For feature 21
-    private void checkWhetherBlockIsGoal() {
+//    public void checkWhetherBlockIsGoal() {
+//        if (this.getCurrCoordinates().equals(board.goal[0])) {
+//            board.end = System.currentTimeMillis();
+//            this.gameIsOver = true;
+//        }
+//    }
+//    new code for part 2, need to be boolean
+    public Boolean checkWhetherBlockIsGoal() {
+        Boolean result = false;
         if (this.getCurrCoordinates().equals(board.goal[0])) {
             board.end = System.currentTimeMillis();
             this.gameIsOver = true;
+            result = true;
         }
-
+        return result;
     }
 
 //    new code for assignment part 2

@@ -31,6 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -38,6 +39,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -45,6 +47,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -52,6 +55,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/red_flower" />
 
@@ -60,6 +64,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -67,6 +72,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
         </TableRow>
 
@@ -80,6 +86,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -87,6 +94,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/cyan_cross" />
 
@@ -95,6 +103,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/yellow_flower" />
 
@@ -103,6 +112,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/yellow_diamond" />
 
@@ -111,6 +121,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/green_cross" />
 
@@ -119,6 +130,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
         </TableRow>
 
@@ -132,6 +144,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -139,6 +152,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/green_flower" />
 
@@ -147,6 +161,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/red_star" />
 
@@ -155,6 +170,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/green_star" />
 
@@ -163,6 +179,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/yellow_diamond" />
 
@@ -171,6 +188,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
         </TableRow>
 
@@ -184,6 +202,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -191,6 +210,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/red_flower" />
 
@@ -199,6 +219,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/cyan_flower" />
 
@@ -207,6 +228,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/red_star" />
 
@@ -215,6 +237,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/green_flower" />
 
@@ -223,6 +246,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
         </TableRow>
 
@@ -236,6 +260,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -243,6 +268,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/cyan_star" />
 
@@ -251,6 +277,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/red_diamond" />
 
@@ -259,6 +286,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/cyan_flower" />
 
@@ -267,6 +295,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/cyan_diamond" />
 
@@ -275,6 +304,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
         </TableRow>
 
@@ -288,6 +318,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -295,6 +326,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -302,6 +334,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/board_block"
                 android:onClick="onClickToMove"
                 app:srcCompat="@drawable/cyan_diamond" />
 
@@ -310,6 +343,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -317,6 +351,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
 
             <ImageView
@@ -324,6 +359,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/empty_block"
                 app:srcCompat="@drawable/empty_block" />
         </TableRow>
     </TableLayout>
@@ -341,7 +377,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout">
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="122dp"

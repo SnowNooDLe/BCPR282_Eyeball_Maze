@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.graphics.Point;
 
 import java.util.Arrays;
 
@@ -129,13 +128,15 @@ public class MainActivity extends AppCompatActivity {
 //    Starting the game and always start with Stage 1.
     public void startGame(View view) {
         board.stageOneBoard();
-
-        board.setGoal(0, 3);
+//        Plan was setting Red Flower for goal but for some reason, if i set Red Flower for goal
+//        and when eyeball gets to the point, app crashes.
+        board.setGoal(2, 4);
         eyeball = new Player(5,2, board);
 
         textViewForGoal.setText("Number of Goal(s) : " + board.numberOfGoals);
         testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
-        setGoalInMaze(0,3);
+
+        setGoalInMaze(2,4);
         setPlayerInMaze(5,2);
     }
 
@@ -224,8 +225,6 @@ public class MainActivity extends AppCompatActivity {
 //            recording direction
             eyeball.recordDirectionHisory();
 
-        Log.d("MYINT", "Movement History : " + Arrays.toString(eyeball.movementHistory));
-        Log.d("MYINT", "Direction History : " + Arrays.toString(eyeball.directionHistory));
 //        updating movements display
         testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
         } else {
@@ -241,13 +240,28 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.show();
         }
 
+        if (eyeball.checkWhetherBlockIsGoal()){
+            textViewForGoal.setText("Number of Goal(s) : " + (board.numberOfGoals - 1));
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("Congratulations ! You finished the game successfully !");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
+
 
     }
 
     public void resetCurrentStage(View view){
+//        resetting previous eyeball image
         imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
         eyeball.resetPlayer();
         setPlayerInMaze(eyeball.getStartingRow(), eyeball.getStartingCol());
-        setGoalInMaze(0,3);
+        setGoalInMaze(2,4);
     }
 }
