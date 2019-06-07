@@ -14,8 +14,8 @@ public class Player {
     private int startRow;
     private int startCol;
     Board board;
-    Point[] movementHistory = new Point[500];
-    String[] directionHistory = new String[500];
+    public Point[] movementHistory = new Point[500];
+    public String[] directionHistory = new String[500];
     private boolean gameIsOver;
 
 
@@ -69,6 +69,17 @@ public class Player {
 
     }
 
+//    new code for assignment part 2
+    public void recordMovementHistory(int row, int col){
+        this.movementHistory[this.countMovement] = new Point(row, col);
+    }
+
+//    new code for assignment part 2
+    public void recordDirectionHisory(){
+        this.directionHistory[this.countMovement] = this.getCurrentDirection();
+    }
+
+
     //	Feature 14
     public Boolean playerFailed() {
 //		means still in progress
@@ -115,7 +126,7 @@ public class Player {
     }
 
     //	Feature 9, movement count
-    private void movementCountIncrease() {
+    public void movementCountIncrease() {
         this.countMovement++;
     }
     //	for go back move once.
@@ -128,7 +139,7 @@ public class Player {
     }
 
     //	method for feature 19 & 20
-    private String getCurrentDirection() {
+    public String getCurrentDirection() {
         return this.direction;
     }
 

@@ -178,15 +178,51 @@ public class MainActivity extends AppCompatActivity {
         int currRow = Character.digit(currentPosition.charAt(0), 10);
         int currCol = Character.digit(currentPosition.charAt(1), 10);
 
-        Log.d("MYINT", "Current location row is : " + currRow);
-        Log.d("MYINT", "Current location col is : " + currCol);
-        Log.d("MYINT", "Target location row is : " + targetRow);
-        Log.d("MYINT", "Target location col is : " + targetCol);
-        Log.d("MYINT", "What is the result ? : " + eyeball.checkDestinationBlock(targetRow, targetCol));
+//        debug purpose
+//        Log.d("MYINT", "Current location row is : " + currRow);
+//        Log.d("MYINT", "Current location col is : " + currCol);
+//        Log.d("MYINT", "Target location row is : " + targetRow);
+//        Log.d("MYINT", "Target location col is : " + targetCol);
+//        Log.d("MYINT", "What is the result ? : " + eyeball.checkDestinationBlock(targetRow, targetCol));
 
-//        if (eyeball.checkDestinationBlock(targetRow, targetCol)){
-//
-//        }
+        if (eyeball.checkDestinationBlock(targetRow, targetCol)){
+//            Resetting current spot's image
+            imageViews[currRow][currCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[currRow][currCol]));
+            imageViews[targetRow][targetCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]));
+            eyeball.setPlayer(targetRow, targetCol);
+
+            Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]);
+            Bitmap image2 = null;
+
+            switch (eyeball.getCurrentDirection()){
+                case "u":
+                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_up);
+                    break;
+                case "l":
+                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_left);
+                    break;
+                case "d":
+                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_down);
+                    break;
+                case "r":
+                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_right);
+                    break;
+            }
+
+
+            Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
+            imageViews[targetRow][targetCol].setImageBitmap(mergedImages);
+
+//            movement increase
+            eyeball.movementCountIncrease();
+//            recording movement
+            eyeball.recordMovementHistory(targetRow, targetCol);
+//            recording direction
+            eyeball.recordDirectionHisory();
+
+        Log.d("MYINT", "Movement History : " + Arrays.toString(eyeball.movementHistory));
+        Log.d("MYINT", "Direction History : " + Arrays.toString(eyeball.directionHistory));
+        }
 
 
     }
