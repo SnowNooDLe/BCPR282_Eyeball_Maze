@@ -102,6 +102,16 @@ public class Player {
         return result;
     }
 
+//    new code as well
+    public int getCurrRowPosition(){
+        return this.rowPosition;
+    }
+
+//    new code as well
+    public int getCurrColPosition(){
+        return this.colPosition;
+    }
+
     private Point getCurrCoordinates() {
         Point result = new Point(this.rowPosition, this.colPosition);
         return result;
@@ -123,6 +133,20 @@ public class Player {
         this.setPlayer(this.startRow, this.startCol);
         this.direction = "u";
         this.countMovement = 0;
+//        new code for part 2
+        this.rowPosition = startRow;
+        this.colPosition = startCol;
+        this.movementHistory[0] = new Point(startRow, startCol);
+        this.directionHistory[0] = this.direction;
+        this.gameIsOver = false;
+    }
+//        new code for part 2
+    public int getStartingRow(){
+        return this.rowPosition;
+    }
+//        new code for part 2
+    public int getStartingCol(){
+        return this.colPosition;
     }
 
     //	Feature 9, movement count

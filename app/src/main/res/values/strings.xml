@@ -4,4 +4,6 @@
     <string name="game_restart">Restart</string>
     <string name="go_back_one_movement">Go back one move</string>
     <string name="sound_control">Sound</string>
+    <string name="number_of_strings">Number of Goal(s) : </string>
+    <string name="number_of_movements">Number of Movements : </string>
 </resources>

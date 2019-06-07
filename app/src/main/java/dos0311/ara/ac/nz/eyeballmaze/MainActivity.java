@@ -1,5 +1,7 @@
 package dos0311.ara.ac.nz.eyeballmaze;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,10 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.Point;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import dos0311.ara.ac.nz.eyeballmaze.Model.*;
 
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView[][] imageViews = new ImageView[6][6];
     int[][] imageSrcs = new int[6][6];
     TextView textViewForGoal;
+    TextView testViewForMovements;
     Player eyeball;
 
     @Override
@@ -30,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        for the goal textView
-        textViewForGoal = findViewById(R.id.textView);
+        textViewForGoal = findViewById(R.id.textViewGoals);
+        testViewForMovements = findViewById(R.id.textViewMovements);
 
         //      first row
         imageViews[0][0] = findViewById(R.id.imageView00);
@@ -131,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         eyeball = new Player(5,2, board);
 
         textViewForGoal.setText("Number of Goal(s) : " + board.numberOfGoals);
+        testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
         setGoalInMaze(0,3);
         setPlayerInMaze(5,2);
     }
@@ -188,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
         if (eyeball.checkDestinationBlock(targetRow, targetCol)){
 //            Resetting current spot's image
             imageViews[currRow][currCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[currRow][currCol]));
+
             imageViews[targetRow][targetCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]));
             eyeball.setPlayer(targetRow, targetCol);
 
@@ -209,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-
             Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
             imageViews[targetRow][targetCol].setImageBitmap(mergedImages);
 
@@ -222,9 +226,28 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("MYINT", "Movement History : " + Arrays.toString(eyeball.movementHistory));
         Log.d("MYINT", "Direction History : " + Arrays.toString(eyeball.directionHistory));
+//        updating movements display
+        testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
+        } else {
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("You can only move to either same color or same shape to Eyeball's front, left or right");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
         }
 
 
     }
 
+    public void resetCurrentStage(View view){
+        imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
+        eyeball.resetPlayer();
+        setPlayerInMaze(eyeball.getStartingRow(), eyeball.getStartingCol());
+        setGoalInMaze(0,3);
+    }
 }

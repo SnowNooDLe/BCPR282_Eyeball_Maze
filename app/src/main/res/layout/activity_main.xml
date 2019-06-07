@@ -373,6 +373,7 @@
                 android:id="@+id/button3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="resetCurrentStage"
                 android:text="@string/game_restart" />
 
             <Button
@@ -389,16 +390,23 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/textViewGoals"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
-                android:text="TextView" />
+                android:text="@string/number_of_strings" />
+
+            <TextView
+                android:id="@+id/textViewMovements"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/number_of_movements" />
 
             <RadioButton
                 android:id="@+id/radioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/sound_control" />
+
         </LinearLayout>
     </LinearLayout>
 
