@@ -39,7 +39,7 @@ public class Player {
 
     //	set player at certain coordinate
 //	actual method to move eyeball.
-    private void setPlayer(int row, int col) {
+    public void setPlayer(int row, int col) {
         this.rowPosition = row;
         this.colPosition = col;
     }
@@ -80,8 +80,14 @@ public class Player {
     }
 
     //  to find player's position
+//    original code
+//    public String getCurrPosition() {
+//        String result = board.map[this.rowPosition][this.colPosition];
+//        return result;
+//    }
+//    new code cuz need different form our return value
     public String getCurrPosition() {
-        String result = board.map[this.rowPosition][this.colPosition];
+        String result = Integer.toString(this.rowPosition) + Integer.toString(this.colPosition);
         return result;
     }
 
@@ -164,7 +170,7 @@ public class Player {
     }
 
     //	Feature 13, destination block validator
-    private Boolean checkDestinationBlock(int targetRow, int targetCol) {
+    public Boolean checkDestinationBlock(int targetRow, int targetCol) {
         Boolean status = false;
         String destinationValidaeResult = "";
 //		to avoid magic number in condition statement
