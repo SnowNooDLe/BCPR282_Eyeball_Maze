@@ -123,10 +123,12 @@ public class MainActivity extends AppCompatActivity {
         imageSrcs[5][3] = R.drawable.empty_block;
         imageSrcs[5][4] = R.drawable.empty_block;
         imageSrcs[5][5] = R.drawable.empty_block;
+
+        startGame();
     }
 
 //    Starting the game and always start with Stage 1.
-    public void startGame(View view) {
+    public void startGame() {
         board.stageOneBoard();
 //        Plan was setting Red Flower for goal but for some reason, if i set Red Flower for goal
 //        and when eyeball gets to the point, app crashes.

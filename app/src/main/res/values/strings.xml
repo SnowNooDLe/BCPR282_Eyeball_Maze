@@ -8,4 +8,6 @@
     <string name="number_of_movements">Number of Movements : </string>
     <string name="board_block">This is a clickable board block</string>
     <string name="empty_block">This is an empty block, cannot move to here</string>
+    <string name="game_auto">Game Start (Auto)</string>
+    <string name="game_manual">Game Start (Manual)</string>
 </resources>
