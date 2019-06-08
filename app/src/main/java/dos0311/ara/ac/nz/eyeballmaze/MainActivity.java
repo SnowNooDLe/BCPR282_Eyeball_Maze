@@ -5,14 +5,16 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.Arrays;
 
 import dos0311.ara.ac.nz.eyeballmaze.Model.*;
 
@@ -24,11 +26,34 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewForGoal;
     TextView testViewForMovements;
     Player eyeball;
+//    It means game is not finished yet if it is true.
+    private Boolean gameIsOn;
+//    will be used for task 17, if user keep trying bad thing, popup warning with rule.
+    private int errorCount = 0;
+
+    Switch soundOnOffSwitch;
+    MediaPlayer bgm, ring;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        soundOnOffSwitch = (Switch) findViewById(R.id.switchSoundOnOff);
+        bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
+        soundOnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
+                    bgm.start();
+                } else {
+                    // The toggle is disabled
+                    bgm.stop();
+                    bgm.release();
+                }
+            }
+        });
 
 //        for the goal textView
         textViewForGoal = findViewById(R.id.textViewGoals);
@@ -129,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
 //    Starting the game and always start with Stage 1.
     public void startGame() {
+        gameIsOn = true;
         board.stageOneBoard();
 //        Plan was setting Red Flower for goal but for some reason, if i set Red Flower for goal
 //        and when eyeball gets to the point, app crashes.
@@ -173,17 +199,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickToMove(View view) {
-        ImageView nextImageView = (ImageView) view;
+        if (gameIsOn){
+            ImageView nextImageView = (ImageView) view;
 
-        String targetPosition = String.valueOf(getLocationImageView(nextImageView));
+            String targetPosition = String.valueOf(getLocationImageView(nextImageView));
 //        to get row and col values
-        int targetRow = Character.digit(targetPosition.charAt(0), 10);
-        int targetCol = Character.digit(targetPosition.charAt(1), 10);
+            int targetRow = Character.digit(targetPosition.charAt(0), 10);
+            int targetCol = Character.digit(targetPosition.charAt(1), 10);
 
-        String currentPosition = eyeball.getCurrPosition();
+            String currentPosition = eyeball.getCurrPosition();
 
-        int currRow = Character.digit(currentPosition.charAt(0), 10);
-        int currCol = Character.digit(currentPosition.charAt(1), 10);
+            int currRow = Character.digit(currentPosition.charAt(0), 10);
+            int currCol = Character.digit(currentPosition.charAt(1), 10);
 
 //        debug purpose
 //        Log.d("MYINT", "Current location row is : " + currRow);
@@ -192,47 +219,113 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d("MYINT", "Target location col is : " + targetCol);
 //        Log.d("MYINT", "What is the result ? : " + eyeball.checkDestinationBlock(targetRow, targetCol));
 
-        if (eyeball.checkDestinationBlock(targetRow, targetCol)){
+            if (eyeball.checkDestinationBlock(targetRow, targetCol)){
 //            Resetting current spot's image
-            imageViews[currRow][currCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[currRow][currCol]));
+                imageViews[currRow][currCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[currRow][currCol]));
 
-            imageViews[targetRow][targetCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]));
-            eyeball.setPlayer(targetRow, targetCol);
+                imageViews[targetRow][targetCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]));
+                eyeball.setPlayer(targetRow, targetCol);
 
-            Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]);
-            Bitmap image2 = null;
+                Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]);
+                Bitmap image2 = null;
 
-            switch (eyeball.getCurrentDirection()){
-                case "u":
-                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_up);
-                    break;
-                case "l":
-                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_left);
-                    break;
-                case "d":
-                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_down);
-                    break;
-                case "r":
-                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_right);
-                    break;
-            }
+                switch (eyeball.getCurrentDirection()){
+                    case "u":
+                        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_up);
+                        break;
+                    case "l":
+                        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_left);
+                        break;
+                    case "d":
+                        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_down);
+                        break;
+                    case "r":
+                        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_right);
+                        break;
+                }
 
-            Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
-            imageViews[targetRow][targetCol].setImageBitmap(mergedImages);
+                Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
+                imageViews[targetRow][targetCol].setImageBitmap(mergedImages);
 
 //            movement increase
-            eyeball.movementCountIncrease();
+                eyeball.movementCountIncrease();
 //            recording movement
-            eyeball.recordMovementHistory(targetRow, targetCol);
+                eyeball.recordMovementHistory(targetRow, targetCol);
 //            recording direction
-            eyeball.recordDirectionHisory();
+                eyeball.recordDirectionHisory();
 
 //        updating movements display
-        testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
+                testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
+            } else {
+//                just telling what to do
+                if (errorCount < 3){
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                    alertDialog.setTitle("Alert");
+                    alertDialog.setMessage("You can only move to either same color or same shape to Eyeball's front, left or right");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+//                    task 17, showing corresponding rule
+                } else {
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                    alertDialog.setTitle("Rule for the game");
+                    alertDialog.setMessage("Based on the face of Eyeball, you can only go to your Front, Right or Left. And the tile you want to go, must be either same color or same shape to your Eyeball's current tile.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+                errorCount++;
+
+            }
+
+            if (eyeball.checkWhetherBlockIsGoal()){
+//                playing winning song
+                ring= MediaPlayer.create(MainActivity.this,R.raw.won_sound);
+                ring.start();
+                textViewForGoal.setText("Number of Goal(s) : " + (board.numberOfGoals - 1));
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("Congratulations ! You won the game !");
+                        alertDialogBuilder.setPositiveButton("Restart",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        resetCurrentStageForDialog();
+                                    }
+                                });
+
+                alertDialogBuilder.setNegativeButton("Close",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+                gameIsOn = false;
+            }
+
+//           checking movements to decide whether game should be over or not
+            if (eyeball.getCurrentMoveCount() > 10){
+//                playing lost sound
+                ring= MediaPlayer.create(MainActivity.this,R.raw.lost_sound);
+                ring.start();
+                gameIsOverBadEnding();
+            }
         } else {
             AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
             alertDialog.setTitle("Alert");
-            alertDialog.setMessage("You can only move to either same color or same shape to Eyeball's front, left or right");
+            alertDialog.setMessage("Game is finished, please restart the game if you want to");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -242,28 +335,74 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.show();
         }
 
-        if (eyeball.checkWhetherBlockIsGoal()){
-            textViewForGoal.setText("Number of Goal(s) : " + (board.numberOfGoals - 1));
-            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-            alertDialog.setTitle("Alert");
-            alertDialog.setMessage("Congratulations ! You finished the game successfully !");
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-        }
 
 
     }
 
-    public void resetCurrentStage(View view){
+//    one for button, one for dialog
+    public void resetCurrentStageForButton(View view){
+        resetStage();
+    }
+
+    public void resetCurrentStageForDialog(){
+        resetStage();
+    }
+
+    private void resetStage(){
 //        resetting previous eyeball image
+        gameIsOn = true;
         imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
         eyeball.resetPlayer();
         setPlayerInMaze(eyeball.getStartingRow(), eyeball.getStartingCol());
         setGoalInMaze(2,4);
+        testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
     }
+
+    public void gameIsOverBadEnding(){
+        gameIsOn = false;
+        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Alert");
+        alertDialog.setMessage("You couldn't make it within 10 movements, please try again !");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    public void goBackOneMove(View view){
+        //        resetting current image without user.
+        imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
+//        go back one movement which will decrease number of movement, position as well
+        eyeball.goBackOneMove();
+
+        Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]);
+        Bitmap image2 = null;
+
+        switch (eyeball.getCurrentDirection()){
+            case "u":
+                image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_up);
+                break;
+            case "l":
+                image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_left);
+                break;
+            case "d":
+                image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_down);
+                break;
+            case "r":
+                image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_right);
+                break;
+        }
+
+        Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
+        imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(mergedImages);
+
+//        update the number of movements as well
+        testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
+
+
+    }
+
 }

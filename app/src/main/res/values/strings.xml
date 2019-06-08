@@ -10,4 +10,6 @@
     <string name="empty_block">This is an empty block, cannot move to here</string>
     <string name="game_auto">Game Start (Auto)</string>
     <string name="game_manual">Game Start (Manual)</string>
+    <string name="sound_on">On</string>
+    <string name="sound_off">Off</string>
 </resources>

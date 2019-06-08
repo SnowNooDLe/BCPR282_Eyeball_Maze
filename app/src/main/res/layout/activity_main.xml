@@ -395,6 +395,7 @@
                     android:id="@+id/button2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="goBackOneMove"
                     android:text="@string/go_back_one_movement" />
             </LinearLayout>
 
@@ -408,7 +409,7 @@
                     android:id="@+id/button3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="resetCurrentStage"
+                    android:onClick="resetCurrentStageForButton"
                     android:text="@string/game_restart" />
 
                 <Button
@@ -436,11 +437,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/number_of_movements" />
 
-                <RadioButton
-                    android:id="@+id/radioButton"
+                <Switch
+                    android:id="@+id/switchSoundOnOff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sound_control" />
+                    android:text="@string/sound_control"
+                    android:textOff="@string/sound_off"
+                    android:textOn="@string/sound_on" />
 
             </LinearLayout>
         </LinearLayout>
