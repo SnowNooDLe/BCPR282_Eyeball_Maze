@@ -20,7 +20,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:onClick="startGameAuto"
             android:text="@string/game_auto"
             android:textSize="30sp" />
 
@@ -30,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorAccent"
+            android:onClick="startGameManual"
             android:text="@string/game_manual"
             android:textSize="30sp" />
 

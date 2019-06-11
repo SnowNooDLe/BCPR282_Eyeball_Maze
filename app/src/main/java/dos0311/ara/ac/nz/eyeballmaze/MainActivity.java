@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,28 +19,39 @@ import android.widget.TextView;
 
 import dos0311.ara.ac.nz.eyeballmaze.Model.*;
 
+import static java.sql.Types.NULL;
+
 public class MainActivity extends AppCompatActivity {
     private int size = 6;
     Board board = new Board(size);
     ImageView[][] imageViews = new ImageView[6][6];
     int[][] imageSrcs = new int[6][6];
     TextView textViewForGoal;
-    TextView testViewForMovements;
+    TextView textViewForMovements;
     Player eyeball;
 //    It means game is not finished yet if it is true.
     private Boolean gameIsOn;
 //    will be used for task 17, if user keep trying bad thing, popup warning with rule.
     private int errorCount = 0;
 
+//    for loading & saving game
+    private int currentNumOfMovements, currentNumOfGoals, currentEyeballRowPosition, currentEyeballColPosition;
+    private String currentDirection;
+    private Point[] currentMovementHistry;
+    private String[] currentDirectionHistory;
+
     Switch soundOnOffSwitch;
     MediaPlayer bgm, lost_case_sound, won_case_sound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        Task 3, Manually create a GUI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        soundOnOffSwitch = (Switch) findViewById(R.id.switchSoundOnOff);
+
+//        Task 14, Display a GUI element to control sound on / off
+        soundOnOffSwitch = findViewById(R.id.switchSoundOnOff);
         bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
         soundOnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -57,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        for the goal textView
         textViewForGoal = findViewById(R.id.textViewGoals);
-        testViewForMovements = findViewById(R.id.textViewMovements);
+        textViewForMovements = findViewById(R.id.textViewMovements);
 
         //      first row
         imageViews[0][0] = findViewById(R.id.imageView00);
@@ -99,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         imageSrcs[2][0] = R.drawable.empty_block;
         imageSrcs[2][1] = R.drawable.green_flower;
-        imageSrcs[2][2] = R.drawable.red_diamond;
+        imageSrcs[2][2] = R.drawable.red_star;
         imageSrcs[2][3] = R.drawable.green_star;
         imageSrcs[2][4] = R.drawable.yellow_diamond;
         imageSrcs[2][5] = R.drawable.empty_block;
@@ -156,18 +168,23 @@ public class MainActivity extends AppCompatActivity {
     public void startGame() {
         gameIsOn = true;
         board.stageOneBoard();
-//        Plan was setting Red Flower for goal but for some reason, if i set Red Flower for goal
-//        and when eyeball gets to the point, app crashes.
+//        Plan was setting Red Flower for goal but for some reason,
+//        if eyeball goes to the REd Flower at Row : 0, Col : 3
+//        App creashes.
         board.setGoal(2, 4);
         eyeball = new Player(5,2, board);
 
-        textViewForGoal.setText("Number of Goal(s) : " + board.numberOfGoals);
-        testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
+//      Task 12. Display the number of goals to do
+        textViewForGoal.setText(R.string.number_of_goals + board.getGoals());
+//       Task 13. Display move counts
+        textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
 
+//        for image
         setGoalInMaze(2,4);
         setPlayerInMaze(5,2);
     }
 
+//    Task 5, Display image of player character
     private void setPlayerInMaze(int row, int col) {
         Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[row][col]);
         Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_up);
@@ -175,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
         imageViews[row][col].setImageBitmap(mergedImages);
     }
 
+//        Task 6, Display Goal(s)
     private void setGoalInMaze(int row, int col) {
         Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[row][col]);
         Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.goal);
@@ -212,13 +230,6 @@ public class MainActivity extends AppCompatActivity {
             int currRow = Character.digit(currentPosition.charAt(0), 10);
             int currCol = Character.digit(currentPosition.charAt(1), 10);
 
-//        debug purpose
-//        Log.d("MYINT", "Current location row is : " + currRow);
-//        Log.d("MYINT", "Current location col is : " + currCol);
-//        Log.d("MYINT", "Target location row is : " + targetRow);
-//        Log.d("MYINT", "Target location col is : " + targetCol);
-//        Log.d("MYINT", "What is the result ? : " + eyeball.checkDestinationBlock(targetRow, targetCol));
-
             if (eyeball.checkDestinationBlock(targetRow, targetCol)){
 //            Resetting current spot's image
                 imageViews[currRow][currCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[currRow][currCol]));
@@ -226,26 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 imageViews[targetRow][targetCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]));
                 eyeball.setPlayer(targetRow, targetCol);
 
-                Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]);
-                Bitmap image2 = null;
-
-                switch (eyeball.getCurrentDirection()){
-                    case "u":
-                        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_up);
-                        break;
-                    case "l":
-                        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_left);
-                        break;
-                    case "d":
-                        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_down);
-                        break;
-                    case "r":
-                        image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_right);
-                        break;
-                }
-
-                Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
-                imageViews[targetRow][targetCol].setImageBitmap(mergedImages);
+                movementHappening();
 
 //            movement increase
                 eyeball.movementCountIncrease();
@@ -255,12 +247,12 @@ public class MainActivity extends AppCompatActivity {
                 eyeball.recordDirectionHisory();
 
 //        updating movements display
-                testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
+                textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
             } else {
 //                just telling what to do
                 if (errorCount < 3){
-                    warningMSG("You can only move to either same color or same shape to Eyeball's front, left or right");
-//                    task 17, showing corresponding rule
+                    warningMSG("You cannot move to there.");
+//                    Task 17, showing corresponding rule
                 } else {
                     warningMSG("Based on the face of Eyeball, you can only go to your Front, Right or Left. And the tile you want to go, must be either same color or same shape to your Eyeball's current tile.");
                 }
@@ -268,17 +260,17 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (eyeball.checkWhetherBlockIsGoal()){
-//                playing winning song
+//               Task 15, playing winning song
                 won_case_sound = MediaPlayer.create(MainActivity.this,R.raw.won_sound);
                 won_case_sound.start();
-                textViewForGoal.setText("Number of Goal(s) : " + (board.numberOfGoals - 1));
+                textViewForGoal.setText(R.string.number_of_goals + (board.getGoals() - 1));
                 gameFinishedMSG("Congratulations ! You won the game !");
                 gameIsOn = false;
             }
 
 //           checking movements to decide whether game should be over or not
             if (eyeball.getCurrentMoveCount() > 10){
-//                playing lost sound
+//               Task 16, playing lost sound
                 lost_case_sound = MediaPlayer.create(MainActivity.this,R.raw.lost_sound);
                 lost_case_sound.start();
                 gameIsOverBadEnding();
@@ -297,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
         resetStage();
     }
 
+//    Task 7, Button for restarting the current maze
     private void resetStage(){
 //        resetting previous eyeball image
         gameIsOn = true;
@@ -304,12 +297,13 @@ public class MainActivity extends AppCompatActivity {
         eyeball.resetPlayer();
         setPlayerInMaze(eyeball.getStartingRow(), eyeball.getStartingCol());
         setGoalInMaze(2,4);
-        testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
+        textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
     }
 
+//    Task 18 & Task 20,  Display dialogue with options after player character has lost
     public void gameIsOverBadEnding(){
         gameIsOn = false;
-        warningMSG("You couldn't make it within 10 movements, please try again !");
+        gameFinishedMSG("You couldn't make it within 10 movements, please try again !");
     }
 
     private void warningMSG(String message){
@@ -324,7 +318,8 @@ public class MainActivity extends AppCompatActivity {
                 });
         alertDialog.show();
     }
-
+    //    Task 18 & Task 19,  Display dialogue with options after player character has won
+//    as its combined for Task 18 ~ 20, depends on the message, can be for won or lost
     private void gameFinishedMSG(String message){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(message);
@@ -346,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-
+//    Extra view feature 1, go back one movement
     public void goBackOneMove(View view){
         if (checkGameIsOver()){
             //        resetting current image without user.
@@ -354,34 +349,82 @@ public class MainActivity extends AppCompatActivity {
 //        go back one movement which will decrease number of movement, position as well
             eyeball.goBackOneMove();
 
-            Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]);
-            Bitmap image2 = null;
-
-            switch (eyeball.getCurrentDirection()){
-                case "u":
-                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_up);
-                    break;
-                case "l":
-                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_left);
-                    break;
-                case "d":
-                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_down);
-                    break;
-                case "r":
-                    image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_right);
-                    break;
-            }
-
-            Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
-            imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(mergedImages);
+            movementHappening();
 
 //        update the number of movements as well
-            testViewForMovements.setText("Number of Movements : " + eyeball.getCurrentMoveCount());
+            textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
+        } else {
+            warningMSG("It only works when game is not finished");
         }
 
     }
 
     private Boolean checkGameIsOver(){
         return gameIsOn;
+    }
+
+//    Task 2, Button for saving a maze
+    public void saveCurrentGame(View view){
+        if (checkGameIsOver()){
+            currentNumOfMovements = eyeball.getCurrentMoveCount();
+            currentNumOfGoals = board.getGoals();
+            currentDirection = eyeball.getCurrentDirection();
+            currentEyeballRowPosition = eyeball.getCurrRowPosition();
+            currentEyeballColPosition = eyeball.getCurrColPosition();
+            currentMovementHistry = eyeball.getMovementHistory();
+            currentDirectionHistory = eyeball.getDirectionHistory();
+
+        } else {
+            warningMSG("Game is finished :) No need to save");
+        }
+    }
+
+//    Task 1, Button for loading a maze
+    public void loadCurrentGame(View view){
+        if (checkGameIsOver() && currentNumOfMovements != NULL){
+            //        resetting current image without user.
+            imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
+
+            eyeball.setCurrentNumOfMovements(currentNumOfMovements);
+            board.setNumOfGoals(currentNumOfGoals);
+            eyeball.setCurrentDirection(currentDirection);
+            eyeball.setCurrentRowPosition(currentEyeballRowPosition);
+            eyeball.setCurrentColPosition(currentEyeballColPosition);
+            eyeball.setMovementHistory(currentMovementHistry);
+            eyeball.setDirectionHistory(currentDirectionHistory);
+
+//            actual movement happening,
+            movementHappening();
+
+//        update the number of movements & Goal as well
+            textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
+            textViewForGoal.setText(R.string.number_of_goals + board.getGoals());
+
+        } else {
+            warningMSG("You can only load the game when its not finished or been saved before");
+        }
+    }
+
+    public void movementHappening(){
+        Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]);
+        Bitmap image2 = null;
+
+        switch (eyeball.getCurrentDirection()){
+            case "u":
+                image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_up);
+                break;
+            case "l":
+                image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_left);
+                break;
+            case "d":
+                image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_down);
+                break;
+            case "r":
+                image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyeball_right);
+                break;
+        }
+
+        Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
+        imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(mergedImages);
     }
 }

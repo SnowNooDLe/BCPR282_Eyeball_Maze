@@ -5,13 +5,13 @@ import android.graphics.Point;
 public class Board {
     public int size;
     public String[][] map;
-    public int mazeLevel;
-    public Block block;
+    private int mazeLevel;
+    private Block block;
     Point[] goal = new Point[10];
-    public int numberOfGoals;
+    private int numberOfGoals;
     public long start;
     public long end;
-    public boolean musicStatus;
+    private boolean musicStatus;
 
     //    Constructor
 //    No algorithm, so need to hard code
@@ -60,6 +60,15 @@ public class Board {
     public void setGoal(int row, int col) {
         this.goal[this.numberOfGoals] = new Point(row, col);
         this.numberOfGoals++;
+    }
+
+//    added method for android app development
+    public int getGoals(){
+        return this.numberOfGoals;
+    }
+
+    public void setNumOfGoals(int currentNumOfGoals){
+        this.numberOfGoals = currentNumOfGoals;
     }
 
     //    Feature 5-1. Creating Maze

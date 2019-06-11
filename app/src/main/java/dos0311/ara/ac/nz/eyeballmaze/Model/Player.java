@@ -13,9 +13,9 @@ public class Player {
     //	Store those value for reset game.
     private int startRow;
     private int startCol;
-    Board board;
-    public Point[] movementHistory = new Point[500];
-    public String[] directionHistory = new String[500];
+    private Board board;
+    private Point[] movementHistory = new Point[500];
+    private String[] directionHistory = new String[500];
     private boolean gameIsOver;
 
 
@@ -58,6 +58,39 @@ public class Player {
             this.directionHistory[this.countMovement] = this.getCurrentDirection();
         }
         this.checkWhetherBlockIsGoal();
+    }
+
+//    Added code for android
+    public Point[] getMovementHistory(){
+        return this.movementHistory;
+    }
+
+    public String[] getDirectionHistory(){
+        return this.directionHistory;
+    }
+
+    public void setMovementHistory(Point[] movementHistory) {
+        this.movementHistory = movementHistory;
+    }
+
+    public void setDirectionHistory(String[] moveHistory){
+        this.directionHistory = moveHistory;
+    }
+
+    public void setCurrentRowPosition(int currentRowPosition){
+        this.rowPosition = currentRowPosition;
+    }
+
+    public void setCurrentColPosition(int currentColPosition){
+        this.colPosition = currentColPosition;
+    }
+
+    public void setCurrentDirection(String currentDirection){
+        this.direction = currentDirection;
+    }
+
+    public void setCurrentNumOfMovements(int currentNumOfMovements){
+        this.countMovement = currentNumOfMovements;
     }
 
     //	checking whether its a goal or not, For feature 21

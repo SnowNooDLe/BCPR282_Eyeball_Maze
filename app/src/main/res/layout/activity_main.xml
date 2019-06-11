@@ -21,6 +21,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
+            android:padding="0dp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
@@ -397,6 +398,13 @@
                     android:layout_height="wrap_content"
                     android:onClick="goBackOneMove"
                     android:text="@string/go_back_one_movement" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="saveCurrentGame"
+                    android:text="@string/game_save" />
             </LinearLayout>
 
             <LinearLayout
@@ -416,7 +424,8 @@
                     android:id="@+id/button4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Button" />
+                    android:onClick="loadCurrentGame"
+                    android:text="@string/game_load" />
             </LinearLayout>
 
             <LinearLayout
@@ -429,7 +438,7 @@
                     android:id="@+id/textViewGoals"
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
-                    android:text="@string/number_of_strings" />
+                    android:text="@string/number_of_goals" />
 
                 <TextView
                     android:id="@+id/textViewMovements"
