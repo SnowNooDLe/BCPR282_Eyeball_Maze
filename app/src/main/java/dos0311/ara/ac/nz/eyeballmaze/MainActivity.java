@@ -175,9 +175,13 @@ public class MainActivity extends AppCompatActivity {
         eyeball = new Player(5,2, board);
 
 //      Task 12. Display the number of goals to do
-        textViewForGoal.setText(R.string.number_of_goals + board.getGoals());
+        textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
 //       Task 13. Display move counts
-        textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
+        textViewForMovements.setText("Number of Movements: "  + eyeball.getCurrentMoveCount());
+
+//        Debugging
+        Log.d("MYINT", "Number of Goal: " + board.getGoals());
+        Log.d("MYINT", "Number of movements: " + eyeball.getCurrentMoveCount());
 
 //        for image
         setGoalInMaze(2,4);
@@ -217,6 +221,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickToMove(View view) {
+        //        Debugging
+        Log.d("MYINT", "Number of Goal: " + board.getGoals());
+        Log.d("MYINT", "Number of movements: " + eyeball.getCurrentMoveCount());
         if (checkGameIsOver()){
             ImageView nextImageView = (ImageView) view;
 
@@ -247,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 eyeball.recordDirectionHisory();
 
 //        updating movements display
-                textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
+                textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
             } else {
 //                just telling what to do
                 if (errorCount < 3){
@@ -263,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 //               Task 15, playing winning song
                 won_case_sound = MediaPlayer.create(MainActivity.this,R.raw.won_sound);
                 won_case_sound.start();
-                textViewForGoal.setText(R.string.number_of_goals + (board.getGoals() - 1));
+                textViewForGoal.setText("Number of Goal(s): " + (board.getGoals() - 1));
                 gameFinishedMSG("Congratulations ! You won the game !");
                 gameIsOn = false;
             }
@@ -297,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
         eyeball.resetPlayer();
         setPlayerInMaze(eyeball.getStartingRow(), eyeball.getStartingCol());
         setGoalInMaze(2,4);
-        textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
+        textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
     }
 
 //    Task 18 & Task 20,  Display dialogue with options after player character has lost
@@ -352,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             movementHappening();
 
 //        update the number of movements as well
-            textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
+            textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
         } else {
             warningMSG("It only works when game is not finished");
         }
@@ -397,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
             movementHappening();
 
 //        update the number of movements & Goal as well
-            textViewForMovements.setText(R.string.number_of_movements + eyeball.getCurrentMoveCount());
+            textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
             textViewForGoal.setText(R.string.number_of_goals + board.getGoals());
 
         } else {
