@@ -13,7 +13,7 @@ public class StartScreen extends AppCompatActivity {
         setContentView(R.layout.activity_start_screen);
     }
 
-    public void startGameManual(View view){
+    public void startGameStageOne(View view){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

@@ -6,8 +6,7 @@
     <string name="sound_control">Sound</string>
     <string name="board_block">This is a clickable board block</string>
     <string name="empty_block">This is an empty block, cannot move to here</string>
-    <string name="game_auto">Game Start (Auto)</string>
-    <string name="game_manual">Game Start (Manual)</string>
+    <string name="game_stage_one">Game Start (Stage 1)</string>
     <string name="sound_on">On</string>
     <string name="sound_off">Off</string>
     <string name="game_save">Save</string>

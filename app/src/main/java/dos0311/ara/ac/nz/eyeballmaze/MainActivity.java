@@ -73,103 +73,121 @@ public class MainActivity extends AppCompatActivity {
         textViewForGoal = findViewById(R.id.textViewGoals);
         textViewForMovements = findViewById(R.id.textViewMovements);
 
+
+        startGameStageOne();
+    }
+
+//    Extra View Feature 3, user can select level by clicking this.
+    public void stageOneSetup(){
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                String imageview = "imageView" + i + j;
+                int resID = getResources().getIdentifier(imageview, "id", getPackageName());
+                imageViews[i][j] = findViewById(resID);
+                imageSrcs[i][j] = R.drawable.empty_block;
+            }
+        }
         //      first row
-        imageViews[0][0] = findViewById(R.id.imageView00);
-        imageViews[0][1] = findViewById(R.id.imageView01);
-        imageViews[0][2] = findViewById(R.id.imageView02);
-        imageViews[0][3] = findViewById(R.id.imageView03);
-        imageViews[0][4] = findViewById(R.id.imageView04);
-        imageViews[0][5] = findViewById(R.id.imageView05);
-
-        imageSrcs[0][0] = R.drawable.empty_block;
-        imageSrcs[0][1] = R.drawable.empty_block;
-        imageSrcs[0][2] = R.drawable.empty_block;
         imageSrcs[0][3] = R.drawable.red_flower;
-        imageSrcs[0][4] = R.drawable.empty_block;
-        imageSrcs[0][5] = R.drawable.empty_block;
 
-        //      second row
-        imageViews[1][0] = findViewById(R.id.imageView10);
-        imageViews[1][1] = findViewById(R.id.imageView11);
-        imageViews[1][2] = findViewById(R.id.imageView12);
-        imageViews[1][3] = findViewById(R.id.imageView13);
-        imageViews[1][4] = findViewById(R.id.imageView14);
-        imageViews[1][5] = findViewById(R.id.imageView15);
-
-        imageSrcs[1][0] = R.drawable.empty_block;
+        //        second row
         imageSrcs[1][1] = R.drawable.cyan_cross;
         imageSrcs[1][2] = R.drawable.yellow_flower;
         imageSrcs[1][3] = R.drawable.yellow_diamond;
         imageSrcs[1][4] = R.drawable.green_cross;
-        imageSrcs[1][5] = R.drawable.empty_block;
 
-        //      third row
-        imageViews[2][0] = findViewById(R.id.imageView20);
-        imageViews[2][1] = findViewById(R.id.imageView21);
-        imageViews[2][2] = findViewById(R.id.imageView22);
-        imageViews[2][3] = findViewById(R.id.imageView23);
-        imageViews[2][4] = findViewById(R.id.imageView24);
-        imageViews[2][5] = findViewById(R.id.imageView25);
-
-        imageSrcs[2][0] = R.drawable.empty_block;
+        //      Third row
         imageSrcs[2][1] = R.drawable.green_flower;
         imageSrcs[2][2] = R.drawable.red_star;
         imageSrcs[2][3] = R.drawable.green_star;
         imageSrcs[2][4] = R.drawable.yellow_diamond;
-        imageSrcs[2][5] = R.drawable.empty_block;
 
         //      fourth row
-        imageViews[3][0] = findViewById(R.id.imageView30);
-        imageViews[3][1] = findViewById(R.id.imageView31);
-        imageViews[3][2] = findViewById(R.id.imageView32);
-        imageViews[3][3] = findViewById(R.id.imageView33);
-        imageViews[3][4] = findViewById(R.id.imageView34);
-        imageViews[3][5] = findViewById(R.id.imageView35);
-
-        imageSrcs[3][0] = R.drawable.empty_block;
         imageSrcs[3][1] = R.drawable.red_flower;
         imageSrcs[3][2] = R.drawable.cyan_flower;
         imageSrcs[3][3] = R.drawable.red_star;
         imageSrcs[3][4] = R.drawable.green_flower;
-        imageSrcs[3][5] = R.drawable.empty_block;
 
-        //      fifth row
-        imageViews[4][0] = findViewById(R.id.imageView40);
-        imageViews[4][1] = findViewById(R.id.imageView41);
-        imageViews[4][2] = findViewById(R.id.imageView42);
-        imageViews[4][3] = findViewById(R.id.imageView43);
-        imageViews[4][4] = findViewById(R.id.imageView44);
-        imageViews[4][5] = findViewById(R.id.imageView45);
-
-        imageSrcs[4][0] = R.drawable.empty_block;
+        //        Fifth row
         imageSrcs[4][1] = R.drawable.cyan_star;
         imageSrcs[4][2] = R.drawable.red_diamond;
         imageSrcs[4][3] = R.drawable.cyan_flower;
         imageSrcs[4][4] = R.drawable.cyan_diamond;
-        imageSrcs[4][5] = R.drawable.empty_block;
 
-        //      sixth row
-        imageViews[5][0] = findViewById(R.id.imageView50);
-        imageViews[5][1] = findViewById(R.id.imageView51);
-        imageViews[5][2] = findViewById(R.id.imageView52);
-        imageViews[5][3] = findViewById(R.id.imageView53);
-        imageViews[5][4] = findViewById(R.id.imageView54);
-        imageViews[5][5] = findViewById(R.id.imageView55);
-
-        imageSrcs[5][0] = R.drawable.empty_block;
-        imageSrcs[5][1] = R.drawable.empty_block;
+        //        Sixth row
         imageSrcs[5][2] = R.drawable.cyan_diamond;
-        imageSrcs[5][3] = R.drawable.empty_block;
-        imageSrcs[5][4] = R.drawable.empty_block;
-        imageSrcs[5][5] = R.drawable.empty_block;
 
-        startGame();
+//      resetting the displayed image to new stage
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                imageViews[i][j].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[i][j]));
+            }
+        }
+
+//        setup with stage one board.
+        board.stageOneBoard();
+
+//        setting the goal, eyeball's position
+        board.setGoal(0, 3);
+        eyeball = new Player(5,2, board);
+
+//      Task 12. Display the number of goals to do
+        textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
+//       Task 13. Display move counts
+        textViewForMovements.setText("Number of Movements: "  + eyeball.getCurrentMoveCount());
+
+//        Debugging
+        Log.d("MYINT", "Number of Goal: " + board.getGoals());
+        Log.d("MYINT", "Number of movements: " + eyeball.getCurrentMoveCount());
+
+//        for image
+        setGoalInMaze(0,3);
+        setPlayerInMaze(5,2);
     }
 
-//    Starting the game and always start with Stage 1.
-    public void startGame() {
-        gameIsOn = true;
-        board.stageOneBoard();
+    public void stageTwoSetup(){
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                String imageview = "imageView" + i + j;
+                int resID = getResources().getIdentifier(imageview, "id", getPackageName());
+                imageViews[i][j] = findViewById(resID);
+                imageSrcs[i][j] = R.drawable.empty_block;
+            }
+        }
+
+//      allocate images into imageSrces
+        imageSrcs[0][3] = R.drawable.red_flower;
+
+        imageSrcs[1][1] = R.drawable.cyan_cross;
+        imageSrcs[1][2] = R.drawable.cyan_flower;
+        imageSrcs[1][3] = R.drawable.cyan_diamond;
+        imageSrcs[1][4] = R.drawable.green_cross;
+
+        imageSrcs[2][1] = R.drawable.green_flower;
+        imageSrcs[2][2] = R.drawable.red_star;
+        imageSrcs[2][3] = R.drawable.green_star;
+        imageSrcs[2][4] = R.drawable.yellow_flower;
+
+        imageSrcs[3][1] = R.drawable.red_flower;
+        imageSrcs[3][2] = R.drawable.green_diamond;
+        imageSrcs[3][3] = R.drawable.red_star;
+        imageSrcs[3][4] = R.drawable.yellow_star;
+
+        imageSrcs[4][1] = R.drawable.green_cross;
+        imageSrcs[4][2] = R.drawable.red_diamond;
+        imageSrcs[4][3] = R.drawable.cyan_flower;
+        imageSrcs[4][4] = R.drawable.green_diamond;
+
+        imageSrcs[5][2] = R.drawable.cyan_diamond;
+
+//        resetting the displayed image to new stage
+        for (int i = 0; i < size; i++){
+            for (int j = 0; j < size; j++){
+                imageViews[i][j].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[i][j]));
+            }
+        }
+
+        board.stageTwoBoard();
 //        Plan was setting Red Flower for goal but for some reason,
 //        if eyeball goes to the REd Flower at Row : 0, Col : 3
 //        App creashes.
@@ -188,6 +206,17 @@ public class MainActivity extends AppCompatActivity {
 //        for image
         setGoalInMaze(0,3);
         setPlayerInMaze(5,2);
+    }
+
+//    Starting the game with stage 1 but when it starts, always run stage one first
+    public void startGameStageOne() {
+        gameIsOn = true;
+        stageOneSetup();
+    }
+//    Starting the game with stage 2
+    public void startGameStageTwo(){
+        gameIsOn = true;
+        stageTwoSetup();
     }
 
 //    Task 5, Display image of player character
@@ -307,8 +336,8 @@ public class MainActivity extends AppCompatActivity {
         resetStage();
     }
 
-    public void resetCurrentStageForDialog(){
-        resetStage();
+    public void goToStageTwo(){
+        startGameStageTwo();
     }
 
 //    Task 7, Button for restarting the current maze
@@ -345,11 +374,11 @@ public class MainActivity extends AppCompatActivity {
     private void gameFinishedMSG(String message){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setPositiveButton("Restart",
+        alertDialogBuilder.setPositiveButton("Go to stage 2",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        resetCurrentStageForDialog();
+                        goToStageTwo();
                     }
                 });
 
