@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private int errorCount = 0;
 
 //    for loading & saving game
-    private int currentNumOfMovements, currentNumOfGoals, currentEyeballRowPosition, currentEyeballColPosition;
+    private int currentStage, currentNumOfMovements, currentNumOfGoals, currentEyeballRowPosition, currentEyeballColPosition;
     private String currentDirection;
     private Point[] currentMovementHistry;
     private String[] currentDirectionHistory;
@@ -136,10 +136,6 @@ public class MainActivity extends AppCompatActivity {
 //       Task 13. Display move counts
         textViewForMovements.setText("Number of Movements: "  + eyeball.getCurrentMoveCount());
 
-//        Debugging
-        Log.d("MYINT", "Number of Goal: " + board.getGoals());
-        Log.d("MYINT", "Number of movements: " + eyeball.getCurrentMoveCount());
-
 //        for image
         setGoalInMaze(0,3);
         setPlayerInMaze(5,2);
@@ -188,9 +184,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         board.stageTwoBoard();
-//        Plan was setting Red Flower for goal but for some reason,
-//        if eyeball goes to the REd Flower at Row : 0, Col : 3
-//        App creashes.
+
         board.setGoal(0, 3);
         eyeball = new Player(5,2, board);
 
@@ -198,10 +192,6 @@ public class MainActivity extends AppCompatActivity {
         textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
 //       Task 13. Display move counts
         textViewForMovements.setText("Number of Movements: "  + eyeball.getCurrentMoveCount());
-
-//        Debugging
-        Log.d("MYINT", "Number of Goal: " + board.getGoals());
-        Log.d("MYINT", "Number of movements: " + eyeball.getCurrentMoveCount());
 
 //        for image
         setGoalInMaze(0,3);
@@ -211,12 +201,23 @@ public class MainActivity extends AppCompatActivity {
 //    Starting the game with stage 1 but when it starts, always run stage one first
     public void startGameStageOne() {
         gameIsOn = true;
+        currentStage = 1;
         stageOneSetup();
     }
 //    Starting the game with stage 2
     public void startGameStageTwo(){
         gameIsOn = true;
+        currentStage = 2;
         stageTwoSetup();
+    }
+
+//    Extra View Feature 3, choose stages via button click
+    public void startGameStageOneViaButton(View view){
+        startGameStageOne();
+    }
+
+    public void startGameStageTwoViaButton(View view){
+        startGameStageTwo();
     }
 
 //    Task 5, Display image of player character
@@ -336,6 +337,10 @@ public class MainActivity extends AppCompatActivity {
         resetStage();
     }
 
+    public void resetCurrentStage(){
+        resetStage();
+    }
+
     public void goToStageTwo(){
         startGameStageTwo();
     }
@@ -374,11 +379,27 @@ public class MainActivity extends AppCompatActivity {
     private void gameFinishedMSG(String message){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setPositiveButton("Go to stage 2",
+        String title = null;
+
+        //      As I only designed for first two stages,
+//      when it gets to second stage, only option will be restart
+        if (currentStage == 1){
+            title = "Go to stage 2";
+        } else {
+            title = "Restart !";
+        }
+
+        alertDialogBuilder.setPositiveButton(title,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        goToStageTwo();
+                        if (currentStage == 1){
+                            goToStageTwo();
+
+                        } else{
+                            resetCurrentStage();
+                        }
+
                     }
                 });
 

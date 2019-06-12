@@ -11,6 +11,8 @@
     <string name="sound_off">Off</string>
     <string name="game_save">Save</string>
     <string name="game_load">Load</string>
+    <string name="stgae_one_choose">Stage 1</string>
+    <string name="stgae_two_choose">Stage 2</string>
     <!--Was trying to use those way but if i do this, will randomly change and crash the app-->
     <string name="number_of_goals">Number of Goal(s) : </string>
     <string name="number_of_movements">Number of Movements : </string>
