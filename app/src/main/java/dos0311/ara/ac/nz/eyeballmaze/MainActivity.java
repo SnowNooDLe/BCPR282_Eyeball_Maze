@@ -51,21 +51,21 @@ public class MainActivity extends AppCompatActivity {
 
 
 //        Task 14, Display a GUI element to control sound on / off
-        soundOnOffSwitch = findViewById(R.id.switchSoundOnOff);
-        bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
-        soundOnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                    bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
-                    bgm.start();
-                } else {
-                    // The toggle is disabled
-                    bgm.stop();
-                    bgm.release();
-                }
-            }
-        });
+//        soundOnOffSwitch = findViewById(R.id.switchSoundOnOff);
+//        bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
+//        soundOnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    // The toggle is enabled
+//                    bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
+//                    bgm.start();
+//                } else {
+//                    // The toggle is disabled
+//                    bgm.stop();
+//                    bgm.release();
+//                }
+//            }
+//        });
 
 //        for the goal textView
         textViewForGoal = findViewById(R.id.textViewGoals);
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 //        Plan was setting Red Flower for goal but for some reason,
 //        if eyeball goes to the REd Flower at Row : 0, Col : 3
 //        App creashes.
-        board.setGoal(2, 4);
+        board.setGoal(0, 3);
         eyeball = new Player(5,2, board);
 
 //      Task 12. Display the number of goals to do
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MYINT", "Number of movements: " + eyeball.getCurrentMoveCount());
 
 //        for image
-        setGoalInMaze(2,4);
+        setGoalInMaze(0,3);
         setPlayerInMaze(5,2);
     }
 
@@ -213,21 +213,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private int getLocationImageView(ImageView imageView) {
+    private String getLocationImageView(ImageView imageView) {
         // https://stackoverflow.com/questions/10137692/how-to-get-resource-name-from-resource-id
         String name = getResources().getResourceEntryName(imageView.getId());
         name = name.replace("imageView", "");
-        return Integer.parseInt(name);
+        return name;
     }
 
     public void onClickToMove(View view) {
-        //        Debugging
-        Log.d("MYINT", "Number of Goal: " + board.getGoals());
-        Log.d("MYINT", "Number of movements: " + eyeball.getCurrentMoveCount());
         if (checkGameIsOver()){
             ImageView nextImageView = (ImageView) view;
 
-            String targetPosition = String.valueOf(getLocationImageView(nextImageView));
+            String targetPosition = getLocationImageView(nextImageView);
 //        to get row and col values
             int targetRow = Character.digit(targetPosition.charAt(0), 10);
             int targetCol = Character.digit(targetPosition.charAt(1), 10);
@@ -303,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
         imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
         eyeball.resetPlayer();
         setPlayerInMaze(eyeball.getStartingRow(), eyeball.getStartingCol());
-        setGoalInMaze(2,4);
+        setGoalInMaze(0,3);
         textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
     }
 
