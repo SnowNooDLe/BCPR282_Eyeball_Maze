@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentDirection;
     private Point[] currentMovementHistry;
     private String[] currentDirectionHistory;
+    private static int TIME_OUT = 1500; //Time to launch the another activity
 
     Switch soundOnOffSwitch;
     MediaPlayer bgm, lost_case_sound, won_case_sound;
@@ -51,21 +53,21 @@ public class MainActivity extends AppCompatActivity {
 
 
 //        Task 14, Display a GUI element to control sound on / off
-//        soundOnOffSwitch = findViewById(R.id.switchSoundOnOff);
-//        bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
-//        soundOnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//                    // The toggle is enabled
-//                    bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
-//                    bgm.start();
-//                } else {
-//                    // The toggle is disabled
-//                    bgm.stop();
-//                    bgm.release();
-//                }
-//            }
-//        });
+        soundOnOffSwitch = findViewById(R.id.switchSoundOnOff);
+        bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
+        soundOnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
+                    bgm.start();
+                } else {
+                    // The toggle is disabled
+                    bgm.stop();
+                    bgm.release();
+                }
+            }
+        });
 
 //        for the goal textView
         textViewForGoal = findViewById(R.id.textViewGoals);
@@ -220,14 +222,18 @@ public class MainActivity extends AppCompatActivity {
         return name;
     }
 
+    public void setImageAtTarget(int targetRow, int targetCol){
+        imageViews[targetRow][targetCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]));
+    }
+
     public void onClickToMove(View view) {
         if (checkGameIsOver()){
             ImageView nextImageView = (ImageView) view;
 
             String targetPosition = getLocationImageView(nextImageView);
 //        to get row and col values
-            int targetRow = Character.digit(targetPosition.charAt(0), 10);
-            int targetCol = Character.digit(targetPosition.charAt(1), 10);
+            final int targetRow = Character.digit(targetPosition.charAt(0), 10);
+            final int targetCol = Character.digit(targetPosition.charAt(1), 10);
 
             String currentPosition = eyeball.getCurrPosition();
 
@@ -253,6 +259,18 @@ public class MainActivity extends AppCompatActivity {
 //        updating movements display
                 textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
             } else {
+//                Extra View Feature 1, getting X sign on the block that user cannot go.
+                Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]);
+                Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.illegal);
+                Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
+                imageViews[targetRow][targetCol].setImageBitmap(mergedImages);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setImageAtTarget(targetRow, targetCol);
+                    }
+                }, TIME_OUT);
+
 //                just telling what to do
                 if (errorCount < 3){
                     warningMSG("You cannot move to there.");
@@ -345,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-//    Extra view feature 1, go back one movement
+//    Extra View Feature 1, go back one movement
     public void goBackOneMove(View view){
         if (checkGameIsOver()){
             //        resetting current image without user.
