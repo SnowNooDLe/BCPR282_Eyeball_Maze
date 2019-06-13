@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
 //        updating movements display
                 textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
             } else {
-//                Extra View Feature 1, getting X sign on the block that user cannot go.
+//                Extra View Feature 2, getting X sign on the block that user cannot go.
                 Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]);
                 Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.illegal);
                 Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
@@ -419,15 +419,22 @@ public class MainActivity extends AppCompatActivity {
 //    Extra View Feature 1, go back one movement
     public void goBackOneMove(View view){
         if (checkGameIsOver()){
-            //        resetting current image without user.
-            imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
-//        go back one movement which will decrease number of movement, position as well
-            eyeball.goBackOneMove();
+//            To check whether use is at starting point or not
+            if (eyeball.getCurrRowPosition() == eyeball.getStartRowPosition()
+                    && eyeball.getCurrColPosition() == eyeball.getStartColPosition()){
+                warningMSG("You are at starting point, cannot go back.");
+            } else {
+//              resetting current image without user.
+                imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
+//              go back one movement which will decrease number of movement, position as well
+                eyeball.goBackOneMove();
 
-            movementHappening();
+                movementHappening();
 
-//        update the number of movements as well
-            textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
+//              update the number of movements as well
+                textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
+            }
+
         } else {
             warningMSG("It only works when game is not finished");
         }

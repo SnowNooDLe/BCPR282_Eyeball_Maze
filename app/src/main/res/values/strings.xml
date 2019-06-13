@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">EyeBallMaze</string>
     <string name="game_start">Start</string>
-    <string name="game_restart">Restart</string>
+    <string name="game_restart">Restart Stage</string>
     <string name="go_back_one_movement">Go back once</string>
     <string name="sound_control">Sound</string>
     <string name="board_block">This is a clickable board block</string>

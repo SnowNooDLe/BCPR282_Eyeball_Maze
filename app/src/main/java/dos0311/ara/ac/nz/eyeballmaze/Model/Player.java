@@ -154,6 +154,17 @@ public class Player {
         return this.colPosition;
     }
 
+    //    new code as well
+    public int getStartRowPosition(){
+        return this.startRow;
+    }
+
+    //    new code as well
+    public int getStartColPosition(){
+        return this.startCol;
+    }
+
+
     private Point getCurrCoordinates() {
         Point result = new Point(this.rowPosition, this.colPosition);
         return result;
