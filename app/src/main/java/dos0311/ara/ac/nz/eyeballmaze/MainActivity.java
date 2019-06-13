@@ -24,7 +24,7 @@ import static java.sql.Types.NULL;
 
 public class MainActivity extends AppCompatActivity {
     private int size = 6;
-    Board board = new Board(size);
+    Board board;
     ImageView[][] imageViews = new ImageView[6][6];
     int[][] imageSrcs = new int[6][6];
     TextView textViewForGoal;
@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        board = new Board(size);
 //        setup with stage one board.
         board.stageOneBoard();
 
@@ -182,6 +183,8 @@ public class MainActivity extends AppCompatActivity {
                 imageViews[i][j].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[i][j]));
             }
         }
+
+        board = new Board(size);
 
         board.stageTwoBoard();
 
