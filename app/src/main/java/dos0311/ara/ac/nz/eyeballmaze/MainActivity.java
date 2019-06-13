@@ -24,35 +24,36 @@ import static java.sql.Types.NULL;
 
 public class MainActivity extends AppCompatActivity {
     private int size = 6;
-    Board board;
-    ImageView[][] imageViews = new ImageView[6][6];
-    int[][] imageSrcs = new int[6][6];
-    TextView textViewForGoal;
-    TextView textViewForMovements;
-    Player eyeball;
-//    It means game is not finished yet if it is true.
+    private Board board;
+    private ImageView[][] imageViews = new ImageView[6][6];
+    private int[][] imageSrcs = new int[6][6];
+    private TextView textViewForGoal, textViewForMovements;
+
+    private Player eyeball;
+//  It means game is not finished yet if it is true.
     private Boolean gameIsOn;
-//    will be used for task 17, if user keep trying bad thing, popup warning with rule.
+//  will be used for task 17, if user keep trying bad thing, popup warning with rule.
     private int errorCount = 0;
 
-//    for loading & saving game
+//  for loading & saving game
     private int currentStage, currentNumOfMovements, currentNumOfGoals, currentEyeballRowPosition, currentEyeballColPosition;
     private String currentDirection;
-    private Point[] currentMovementHistry;
+    private Point[] currentMovementHistory;
     private String[] currentDirectionHistory;
-    private static int TIME_OUT = 1500; //Time to launch the another activity
+//  Time to launch the another activity
+    private static int TIME_OUT = 1500;
 
-    Switch soundOnOffSwitch;
-    MediaPlayer bgm, lost_case_sound, won_case_sound;
+    private Switch soundOnOffSwitch;
+    private MediaPlayer bgm, lost_case_sound, won_case_sound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        Task 3, Manually create a GUI
+//      Task 3, Manually create a GUI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-//        Task 14, Display a GUI element to control sound on / off
+//      Task 14, Display a GUI element to control sound on / off
         soundOnOffSwitch = findViewById(R.id.switchSoundOnOff);
         bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
         soundOnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -69,15 +70,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        for the goal textView
+//      for the goal textView
         textViewForGoal = findViewById(R.id.textViewGoals);
         textViewForMovements = findViewById(R.id.textViewMovements);
-
-
+//      As when game starts, it will always start with stage 1
         startGameStageOne();
     }
 
-//    Extra View Feature 3, user can select level by clicking this.
+//  Extra View Feature 3, user can select level by clicking this.
     public void stageOneSetup(){
         for (int i = 0; i < size; i++){
             for (int j = 0; j < size; j++){
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 //       Task 13. Display move counts
         textViewForMovements.setText("Number of Movements: "  + eyeball.getCurrentMoveCount());
 
-//        for image
+//      for image
         setGoalInMaze(0,3);
         setPlayerInMaze(5,2);
     }
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
             ImageView nextImageView = (ImageView) view;
 
             String targetPosition = getLocationImageView(nextImageView);
-//        to get row and col values
+//          to get row and col values
             final int targetRow = Character.digit(targetPosition.charAt(0), 10);
             final int targetCol = Character.digit(targetPosition.charAt(1), 10);
 
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
             int currCol = Character.digit(currentPosition.charAt(1), 10);
 
             if (eyeball.checkDestinationBlock(targetRow, targetCol)){
-//            Resetting current spot's image
+//              Resetting current spot's image
                 imageViews[currRow][currCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[currRow][currCol]));
 
                 imageViews[targetRow][targetCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]));
@@ -282,14 +282,14 @@ public class MainActivity extends AppCompatActivity {
 
                 movementHappening();
 
-//            movement increase
+//              movement increase
                 eyeball.movementCountIncrease();
-//            recording movement
+//              recording movement
                 eyeball.recordMovementHistory(targetRow, targetCol);
-//            recording direction
+//              recording direction
                 eyeball.recordDirectionHisory();
 
-//        updating movements display
+//              updating movements display
                 textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
             } else {
 //                Extra View Feature 2, getting X sign on the block that user cannot go.
@@ -382,7 +382,8 @@ public class MainActivity extends AppCompatActivity {
     private void gameFinishedMSG(String message){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(message);
-        String title = null;
+//      Local variable just for this dialog
+        String title;
 
         //      As I only designed for first two stages,
 //      when it gets to second stage, only option will be restart
@@ -453,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
             currentDirection = eyeball.getCurrentDirection();
             currentEyeballRowPosition = eyeball.getCurrRowPosition();
             currentEyeballColPosition = eyeball.getCurrColPosition();
-            currentMovementHistry = eyeball.getMovementHistory();
+            currentMovementHistory = eyeball.getMovementHistory();
             currentDirectionHistory = eyeball.getDirectionHistory();
 
         } else {
@@ -472,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
             eyeball.setCurrentDirection(currentDirection);
             eyeball.setCurrentRowPosition(currentEyeballRowPosition);
             eyeball.setCurrentColPosition(currentEyeballColPosition);
-            eyeball.setMovementHistory(currentMovementHistry);
+            eyeball.setMovementHistory(currentMovementHistory);
             eyeball.setDirectionHistory(currentDirectionHistory);
 
 //            actual movement happening,
