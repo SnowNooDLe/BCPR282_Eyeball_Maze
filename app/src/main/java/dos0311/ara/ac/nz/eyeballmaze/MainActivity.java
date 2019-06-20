@@ -352,12 +352,28 @@ public class MainActivity extends AppCompatActivity {
     private void resetStage(){
 //        resetting previous eyeball image
         gameIsOn = true;
+        errorCount = 0;
         imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
+        if (currentStage == 1){
+            resetStageOne();
+        } else if (currentStage == 2) {
+            resetStageTwo();
+        }
         eyeball.resetPlayer();
         setPlayerInMaze(eyeball.getStartingRow(), eyeball.getStartingCol());
-        setGoalInMaze(0,3);
+
         textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
+        textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
     }
+    private void resetStageOne(){
+//        board.setGoal(0,3);
+        setGoalInMaze(0,3);
+    }
+    private void resetStageTwo(){
+//        board.setGoal(0,3);
+        setGoalInMaze(0,3);
+    }
+
 
 //    Task 18 & Task 20,  Display dialogue with options after player character has lost
     public void gameIsOverBadEnding(){
@@ -449,13 +465,17 @@ public class MainActivity extends AppCompatActivity {
 //    Task 2, Button for saving a maze
     public void saveCurrentGame(View view){
         if (checkGameIsOver()){
-            currentNumOfMovements = eyeball.getCurrentMoveCount();
-            currentNumOfGoals = board.getGoals();
-            currentDirection = eyeball.getCurrentDirection();
-            currentEyeballRowPosition = eyeball.getCurrRowPosition();
-            currentEyeballColPosition = eyeball.getCurrColPosition();
-            currentMovementHistory = eyeball.getMovementHistory();
-            currentDirectionHistory = eyeball.getDirectionHistory();
+            if (eyeball.getCurrentMoveCount() == 0){
+                warningMSG("You are still at starting point, no need to save");
+            } else {
+                currentNumOfMovements = eyeball.getCurrentMoveCount();
+                currentNumOfGoals = board.getGoals();
+                currentDirection = eyeball.getCurrentDirection();
+                currentEyeballRowPosition = eyeball.getCurrRowPosition();
+                currentEyeballColPosition = eyeball.getCurrColPosition();
+                currentMovementHistory = eyeball.getMovementHistory();
+                currentDirectionHistory = eyeball.getDirectionHistory();
+            }
 
         } else {
             warningMSG("Game is finished :) No need to save");
@@ -481,7 +501,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        update the number of movements & Goal as well
             textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
-            textViewForGoal.setText(R.string.number_of_goals + board.getGoals());
+            textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
 
         } else {
             warningMSG("You can only load the game when its not finished or been saved before");

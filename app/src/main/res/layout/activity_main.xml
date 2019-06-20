@@ -439,14 +439,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="startGameStageOneViaButton"
-                    android:text="@string/stgae_one_choose" />
+                    android:text="@string/stage_one_choose" />
 
                 <Button
                     android:id="@+id/button6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="startGameStageTwoViaButton"
-                    android:text="@string/stgae_two_choose" />
+                    android:text="@string/stage_two_choose" />
 
             </LinearLayout>
 
