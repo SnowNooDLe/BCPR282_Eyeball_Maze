@@ -1,8 +1,8 @@
 package dos0311.ara.ac.nz.eyeballmaze.Model;
 
 public class Block {
-    public String shape;
-    public String color;
+    private String shape;
+    private String color;
     //	Constructor for Block
     public Block(String newShape, String newColor) {
         this.shape = newShape;
