@@ -18,6 +18,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import dos0311.ara.ac.nz.eyeballmaze.Model.*;
 
 import static java.sql.Types.NULL;
@@ -42,25 +54,31 @@ public class MainActivity extends AppCompatActivity {
     private String[] currentDirectionHistory;
 //  Time to launch the another activity
     private static int TIME_OUT = 1500;
+//  To store values into those array from DB.
+    private Point[] movementHistoryArray = new Point[10];
+    private String[] directionHistoryArray = new String[10];
 
     private Switch soundOnOffSwitch;
     private MediaPlayer bgm, lost_case_sound, won_case_sound;
+//    to notify whether game is been saved in firebase
+    private boolean gameIsSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //      Task 3, Manually create a GUI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//        even with firebase, using this value to be working like local DB
+        gameIsSaved = false;
 
 //      Task 14, Display a GUI element to control sound on / off
         soundOnOffSwitch = findViewById(R.id.switchSoundOnOff);
-        bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
         soundOnOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     // The toggle is enabled
-                    bgm = MediaPlayer.create(MainActivity.this,R.raw.hellomrmyyesterday);
+                    bgm = MediaPlayer.create(MainActivity.this,R.raw.hypnotic_puzzle3);
+                    bgm.setLooping(true);
                     bgm.start();
                 } else {
                     // The toggle is disabled
@@ -204,12 +222,14 @@ public class MainActivity extends AppCompatActivity {
 //    Starting the game with stage 1 but when it starts, always run stage one first
     public void startGameStageOne() {
         gameIsOn = true;
+        gameIsSaved = false;
         currentStage = 1;
         stageOneSetup();
     }
 //    Starting the game with stage 2
     public void startGameStageTwo(){
         gameIsOn = true;
+        gameIsSaved = false;
         currentStage = 2;
         stageTwoSetup();
     }
@@ -272,6 +292,13 @@ public class MainActivity extends AppCompatActivity {
 
             int currRow = Character.digit(currentPosition.charAt(0), 10);
             int currCol = Character.digit(currentPosition.charAt(1), 10);
+
+//            -------------------------------------------------- DEBUG ----------------------------
+            Log.d("MYINT", "Player is currently at Row: " + currRow + " Col: " + currCol);
+            Log.d("MYINT", "Player is facing : " + eyeball.getCurrentDirection());
+            Log.d("MYINT", "Target til is  at Row: " + targetRow + " Col: " + targetCol);
+            Log.d("MYINT", "Is it movable ? : " + eyeball.checkDestinationBlock(targetRow, targetCol));
+//            -------------------------------------------------------------------------------------
 
             if (eyeball.checkDestinationBlock(targetRow, targetCol)){
 //              Resetting current spot's image
@@ -468,13 +495,46 @@ public class MainActivity extends AppCompatActivity {
             if (eyeball.getCurrentMoveCount() == 0){
                 warningMSG("You are still at starting point, no need to save");
             } else {
-                currentNumOfMovements = eyeball.getCurrentMoveCount();
-                currentNumOfGoals = board.getGoals();
-                currentDirection = eyeball.getCurrentDirection();
-                currentEyeballRowPosition = eyeball.getCurrRowPosition();
-                currentEyeballColPosition = eyeball.getCurrColPosition();
-                currentMovementHistory = eyeball.getMovementHistory();
-                currentDirectionHistory = eyeball.getDirectionHistory();
+//                Add extra view 4, ask if they are sure to save if they are existing save data
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                DatabaseReference movements = database.getReference("movements");
+                movements.setValue(eyeball.getCurrentMoveCount());
+
+                DatabaseReference goals = database.getReference("goals");
+                goals.setValue(board.getGoals());
+
+                DatabaseReference directions = database.getReference("directions");
+                directions.setValue(eyeball.getCurrentDirection());
+
+                DatabaseReference currentRowPosition = database.getReference("currentRowPosition");
+                currentRowPosition.setValue(eyeball.getCurrRowPosition());
+
+                DatabaseReference currentColPosition = database.getReference("currentColPosition");
+                currentColPosition.setValue(eyeball.getCurrColPosition());
+
+
+                DatabaseReference movementHistory = database.getReference("movementHistory");
+                DatabaseReference movementRef = movementHistory.child("History");
+
+                Map<String, Point> moveHistory = new HashMap<>();
+                for (int i = 0; i <= eyeball.getCurrentMoveCount(); i++){
+                    moveHistory.put("Spot " + i, (eyeball.getMovementHistory()[i]));
+                }
+                movementRef.setValue(moveHistory);
+
+
+                DatabaseReference directionHistory = database.getReference("directionHistory");
+
+                DatabaseReference directionRef = directionHistory.child("History");
+
+                Map<String, String> directHistory = new HashMap<>();
+                for (int i = 0; i <= eyeball.getCurrentMoveCount(); i++){
+                    directHistory.put("Spot " + i, eyeball.getDirectionHistory()[i]);
+                }
+                directionRef.setValue(directHistory);
+
+                gameIsSaved = true;
             }
 
         } else {
@@ -482,26 +542,171 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void loadingDataFromDB(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+//            Number of Movements
+        DatabaseReference movements = database.getReference("movements");
+        // Attach a listener to read the data at our posts reference
+        movements.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Integer movementsFromDB = dataSnapshot.getValue(Integer.class);
+                eyeball.setCurrentNumOfMovements(movementsFromDB);
+                Log.d("MYINT", "Load successfully number of movements :" + movementsFromDB);
+                Log.d("MYINT", "What is number of movements :" + eyeball.getCurrentMoveCount());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+//            For number of goals
+        DatabaseReference goals = database.getReference("goals");
+        // Attach a listener to read the data at our posts reference
+        goals.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Integer goalsFromDB = dataSnapshot.getValue(Integer.class);
+                board.setNumOfGoals(goalsFromDB);
+                Log.d("MYINT", "Load successfully number of goals :" + goalsFromDB);
+                Log.d("MYINT", "What is number of goals :" + board.getGoals());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+//            For Direction
+        DatabaseReference directions = database.getReference("directions");
+        // Attach a listener to read the data at our posts reference
+        directions.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String directionsFromDB = dataSnapshot.getValue(String.class);
+                eyeball.setCurrentDirection(directionsFromDB);
+                Log.d("MYINT", "Load successfully current direction :" + directionsFromDB);
+                Log.d("MYINT", "What is direction :" + eyeball.getCurrentDirection());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+//            For Row Position
+        DatabaseReference currentRowPosition = database.getReference("currentRowPosition");
+        // Attach a listener to read the data at our posts reference
+        currentRowPosition.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Integer currentRowPositionFromDB = dataSnapshot.getValue(Integer.class);
+                eyeball.setCurrentRowPosition(currentRowPositionFromDB);
+                Log.d("MYINT", "Load successfully currentRowPosition : " + currentRowPositionFromDB);
+                Log.d("MYINT", "What is Row Position :" + eyeball.getCurrRowPosition());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+//            For Col Position
+        DatabaseReference currentColPosition = database.getReference("currentColPosition");
+        // Attach a listener to read the data at our posts reference
+        currentColPosition.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Integer currentColPositionFromDB = dataSnapshot.getValue(Integer.class);
+                eyeball.setCurrentColPosition(currentColPositionFromDB);
+                Log.d("MYINT", "Load successfully currentColPosition is : " + currentColPositionFromDB);
+                Log.d("MYINT", "What is Col Position :" + eyeball.getCurrColPosition());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+//            For movement history
+        final DatabaseReference movementHistory = database.getReference("movementHistory");
+        DatabaseReference childOfMovementHistory = movementHistory.child("History");
+        // Attach a listener to read the data at our posts reference
+        childOfMovementHistory.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int i = 0;
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Point movementHistoryFromDB = ds.getValue(Point.class);
+                    movementHistoryArray[i] = movementHistoryFromDB;
+                    Log.d("MYINT", "Load successfully movement History is : " + ds.getKey() + movementHistoryFromDB);
+                    Log.d("MYINT", "What is History of Movement :" + movementHistoryArray[i]);
+                    i++;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        eyeball.setMovementHistory(movementHistoryArray);
+
+//            For direction history
+        DatabaseReference directionHistory = database.getReference("directionHistory");
+        DatabaseReference childOfDirectionHistory = directionHistory.child("History");
+        // Attach a listener to read the data at our posts reference
+        childOfDirectionHistory.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int i = 0;
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String directionHistoryFromDB = ds.getValue(String.class);
+                    directionHistoryArray[i] = directionHistoryFromDB;
+                    Log.d("MYINT", "Load successfully movement History is : " + ds.getKey() + directionHistoryFromDB);
+                    Log.d("MYINT", "What is History of direction :" + directionHistoryArray[i]);
+                    i++;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        eyeball.setDirectionHistory(directionHistoryArray);
+    }
+    public void restSetupAfterLoad(){
+//            actual movement happening,
+        movementHappening();
+
+//        update the number of movements & Goal as well
+        textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
+        Log.d("MYINT", "Player is facing : " + eyeball.getCurrentMoveCount());
+        textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
+
+    }
+
 //    Task 1, Button for loading a maze
     public void loadCurrentGame(View view){
-        if (checkGameIsOver() && currentNumOfMovements != NULL){
+        if (checkGameIsOver() && gameIsSaved){
             //        resetting current image without user.
             imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()]));
 
-            eyeball.setCurrentNumOfMovements(currentNumOfMovements);
-            board.setNumOfGoals(currentNumOfGoals);
-            eyeball.setCurrentDirection(currentDirection);
-            eyeball.setCurrentRowPosition(currentEyeballRowPosition);
-            eyeball.setCurrentColPosition(currentEyeballColPosition);
-            eyeball.setMovementHistory(currentMovementHistory);
-            eyeball.setDirectionHistory(currentDirectionHistory);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    restSetupAfterLoad();
+                }
+            }, TIME_OUT);
 
-//            actual movement happening,
-            movementHappening();
+            loadingDataFromDB();
 
-//        update the number of movements & Goal as well
-            textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
-            textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
+
 
         } else {
             warningMSG("You can only load the game when its not finished or been saved before");

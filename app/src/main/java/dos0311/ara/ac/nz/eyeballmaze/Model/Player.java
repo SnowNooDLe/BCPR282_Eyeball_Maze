@@ -14,8 +14,8 @@ public class Player {
     private int startRow;
     private int startCol;
     private Board board;
-    private Point[] movementHistory = new Point[500];
-    private String[] directionHistory = new String[500];
+    private Point[] movementHistory = new Point[10];
+    private String[] directionHistory = new String[10];
     private boolean gameIsOver;
 
 
@@ -31,6 +31,11 @@ public class Player {
         this.rowPosition = startingRow;
         this.colPosition = startingCol;
         this.board = board;
+////        to avoid null error,
+//        for (int i = 0; i < 10; i++){
+//            this.movementHistory[i] = new Point(0,0);
+//            this.directionHistory[i] = this.direction;
+//        }
         this.movementHistory[0] = new Point(startingRow, startingCol);
         this.directionHistory[0] = this.direction;
         this.gameIsOver = false;
@@ -267,13 +272,13 @@ public class Player {
         String[] destinationSpot = board.map[targetRow][targetCol].split("\\|");
         String[] currentSpot = board.map[this.rowPosition][this.colPosition].split("\\|");
 
-        if (this.direction == "u") {
+        if (this.direction.equals("u")) {
             destinationValidaeResult = facingUpMovement(targetRow, targetCol, destinationSpot, currentSpot, rowCoordinate, colCoordinate);
-        } else if (this.direction == "l") {
+        } else if (this.direction.equals("l")) {
             destinationValidaeResult = facingLeftMovement(targetRow, targetCol, destinationSpot, currentSpot, rowCoordinate, colCoordinate);
-        } else if (this.direction == "d") {
+        } else if (this.direction.equals("d")) {
             destinationValidaeResult = facingDownMovement(targetRow, targetCol, destinationSpot, currentSpot, rowCoordinate, colCoordinate);
-        } else if (this.direction == "r") {
+        } else if (this.direction.equals("r")) {
             destinationValidaeResult = facingRightMovement(targetRow, targetCol, destinationSpot, currentSpot, rowCoordinate, colCoordinate);
         } else {
 //			debug purpose
