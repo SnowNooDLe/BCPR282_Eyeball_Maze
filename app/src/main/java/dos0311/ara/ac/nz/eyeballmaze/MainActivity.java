@@ -493,9 +493,9 @@ public class MainActivity extends AppCompatActivity {
     public void saveCurrentGame(View view){
         if (checkGameIsOver()){
             if (eyeball.getCurrentMoveCount() == 0){
+//          Add extra view 5, when it's at starting point, notify user that they don't have to instead of not doing anything
                 warningMSG("You are still at starting point, no need to save");
             } else {
-//                Add extra view 4, ask if they are sure to save if they are existing save data
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
 
                 DatabaseReference movements = database.getReference("movements");
@@ -705,10 +705,8 @@ public class MainActivity extends AppCompatActivity {
             }, TIME_OUT);
 
             loadingDataFromDB();
-
-
-
         } else {
+//          EXTRA VIEW Feature 4, warning sign when it is not during the came or never been saved.
             warningMSG("You can only load the game when its not finished or been saved before");
         }
     }
