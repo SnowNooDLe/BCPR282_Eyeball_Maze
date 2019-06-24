@@ -14,8 +14,8 @@ public class Player {
     private int startRow;
     private int startCol;
     private Board board;
-    private Point[] movementHistory = new Point[10];
-    private String[] directionHistory = new String[10];
+    private Point[] movementHistory = new Point[11];
+    private String[] directionHistory = new String[11];
     private boolean gameIsOver;
 
 
@@ -31,11 +31,6 @@ public class Player {
         this.rowPosition = startingRow;
         this.colPosition = startingCol;
         this.board = board;
-////        to avoid null error,
-//        for (int i = 0; i < 10; i++){
-//            this.movementHistory[i] = new Point(0,0);
-//            this.directionHistory[i] = this.direction;
-//        }
         this.movementHistory[0] = new Point(startingRow, startingCol);
         this.directionHistory[0] = this.direction;
         this.gameIsOver = false;

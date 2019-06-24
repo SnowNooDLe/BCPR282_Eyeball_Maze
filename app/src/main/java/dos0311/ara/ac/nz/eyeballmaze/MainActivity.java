@@ -24,15 +24,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import dos0311.ara.ac.nz.eyeballmaze.Model.*;
 
-import static java.sql.Types.NULL;
 
 public class MainActivity extends AppCompatActivity {
     private int size = 6;
@@ -292,14 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
             int currRow = Character.digit(currentPosition.charAt(0), 10);
             int currCol = Character.digit(currentPosition.charAt(1), 10);
-
-//            -------------------------------------------------- DEBUG ----------------------------
-            Log.d("MYINT", "Player is currently at Row: " + currRow + " Col: " + currCol);
-            Log.d("MYINT", "Player is facing : " + eyeball.getCurrentDirection());
-            Log.d("MYINT", "Target til is  at Row: " + targetRow + " Col: " + targetCol);
-            Log.d("MYINT", "Is it movable ? : " + eyeball.checkDestinationBlock(targetRow, targetCol));
-//            -------------------------------------------------------------------------------------
-
+            
             if (eyeball.checkDestinationBlock(targetRow, targetCol)){
 //              Resetting current spot's image
                 imageViews[currRow][currCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[currRow][currCol]));
@@ -553,8 +543,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer movementsFromDB = dataSnapshot.getValue(Integer.class);
                 eyeball.setCurrentNumOfMovements(movementsFromDB);
-                Log.d("MYINT", "Load successfully number of movements :" + movementsFromDB);
-                Log.d("MYINT", "What is number of movements :" + eyeball.getCurrentMoveCount());
             }
 
             @Override
@@ -570,8 +558,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer goalsFromDB = dataSnapshot.getValue(Integer.class);
                 board.setNumOfGoals(goalsFromDB);
-                Log.d("MYINT", "Load successfully number of goals :" + goalsFromDB);
-                Log.d("MYINT", "What is number of goals :" + board.getGoals());
             }
 
             @Override
@@ -587,8 +573,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String directionsFromDB = dataSnapshot.getValue(String.class);
                 eyeball.setCurrentDirection(directionsFromDB);
-                Log.d("MYINT", "Load successfully current direction :" + directionsFromDB);
-                Log.d("MYINT", "What is direction :" + eyeball.getCurrentDirection());
             }
 
             @Override
@@ -604,8 +588,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer currentRowPositionFromDB = dataSnapshot.getValue(Integer.class);
                 eyeball.setCurrentRowPosition(currentRowPositionFromDB);
-                Log.d("MYINT", "Load successfully currentRowPosition : " + currentRowPositionFromDB);
-                Log.d("MYINT", "What is Row Position :" + eyeball.getCurrRowPosition());
             }
 
             @Override
@@ -621,8 +603,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer currentColPositionFromDB = dataSnapshot.getValue(Integer.class);
                 eyeball.setCurrentColPosition(currentColPositionFromDB);
-                Log.d("MYINT", "Load successfully currentColPosition is : " + currentColPositionFromDB);
-                Log.d("MYINT", "What is Col Position :" + eyeball.getCurrColPosition());
             }
 
             @Override
@@ -642,8 +622,6 @@ public class MainActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     Point movementHistoryFromDB = ds.getValue(Point.class);
                     movementHistoryArray[i] = movementHistoryFromDB;
-                    Log.d("MYINT", "Load successfully movement History is : " + ds.getKey() + movementHistoryFromDB);
-                    Log.d("MYINT", "What is History of Movement :" + movementHistoryArray[i]);
                     i++;
                 }
             }
@@ -666,8 +644,6 @@ public class MainActivity extends AppCompatActivity {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
                     String directionHistoryFromDB = ds.getValue(String.class);
                     directionHistoryArray[i] = directionHistoryFromDB;
-                    Log.d("MYINT", "Load successfully movement History is : " + ds.getKey() + directionHistoryFromDB);
-                    Log.d("MYINT", "What is History of direction :" + directionHistoryArray[i]);
                     i++;
                 }
             }
@@ -686,7 +662,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        update the number of movements & Goal as well
         textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
-        Log.d("MYINT", "Player is facing : " + eyeball.getCurrentMoveCount());
         textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
 
     }
