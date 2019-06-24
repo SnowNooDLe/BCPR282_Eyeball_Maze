@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
             int currRow = Character.digit(currentPosition.charAt(0), 10);
             int currCol = Character.digit(currentPosition.charAt(1), 10);
-            
+
             if (eyeball.checkDestinationBlock(targetRow, targetCol)){
 //              Resetting current spot's image
                 imageViews[currRow][currCol].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[currRow][currCol]));
