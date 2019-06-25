@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Board board;
     private ImageView[][] imageViews = new ImageView[6][6];
     private int[][] imageSrcs = new int[6][6];
-    private TextView textViewForGoal, textViewForMovements;
+    private TextView textViewForGoal, textViewForMovements, textViewForStage;
 
     private Player eyeball;
 //  It means game is not finished yet if it is true.
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 //      for the goal textView
         textViewForGoal = findViewById(R.id.textViewGoals);
         textViewForMovements = findViewById(R.id.textViewMovements);
+        textViewForStage = findViewById(R.id.stageIndicator);
 //      As when game starts, it will always start with stage 1
         startGameStageOne();
     }
@@ -148,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
         eyeball = new Player(5,2, board);
 
 //      Task 12. Display the number of goals to do
-        textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
+        textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()));
 //       Task 13. Display move counts
-        textViewForMovements.setText("Number of Movements: "  + eyeball.getCurrentMoveCount());
+        textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
 
 //        for image
         setGoalInMaze(0,3);
@@ -207,9 +208,9 @@ public class MainActivity extends AppCompatActivity {
         eyeball = new Player(5,2, board);
 
 //      Task 12. Display the number of goals to do
-        textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
+        textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()));
 //       Task 13. Display move counts
-        textViewForMovements.setText("Number of Movements: "  + eyeball.getCurrentMoveCount());
+        textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
 
 //      for image
         setGoalInMaze(0,3);
@@ -220,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
     public void startGameStageOne() {
         gameIsOn = true;
         gameIsSaved = false;
+//        Extra View Feature 4, stage indicator
+        textViewForStage.setText(R.string.stage_one_choose);
         currentStage = 1;
         stageOneSetup();
     }
@@ -227,6 +230,8 @@ public class MainActivity extends AppCompatActivity {
     public void startGameStageTwo(){
         gameIsOn = true;
         gameIsSaved = false;
+//        Extra View Feature 4, stage indicator
+        textViewForStage.setText(R.string.stage_two_choose);
         currentStage = 2;
         stageTwoSetup();
     }
@@ -307,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                 eyeball.recordDirectionHisory();
 
 //              updating movements display
-                textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
+                textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
             } else {
 //                Extra View Feature 2, getting X sign on the block that user cannot go.
                 Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]);
@@ -335,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
 //               Task 15, playing winning song
                 won_case_sound = MediaPlayer.create(MainActivity.this,R.raw.won_sound);
                 won_case_sound.start();
-                textViewForGoal.setText("Number of Goal(s): " + (board.getGoals() - 1));
+                textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()-1));
                 gameFinishedMSG("Congratulations ! You won the game !");
                 gameIsOn = false;
             }
@@ -379,8 +384,8 @@ public class MainActivity extends AppCompatActivity {
         eyeball.resetPlayer();
         setPlayerInMaze(eyeball.getStartingRow(), eyeball.getStartingCol());
 
-        textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
-        textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
+        textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
+        textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()));
     }
     private void resetStageOne(){
 //        board.setGoal(0,3);
@@ -466,7 +471,7 @@ public class MainActivity extends AppCompatActivity {
                 movementHappening();
 
 //              update the number of movements as well
-                textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
+                textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
             }
 
         } else {
@@ -661,9 +666,8 @@ public class MainActivity extends AppCompatActivity {
         movementHappening();
 
 //        update the number of movements & Goal as well
-        textViewForMovements.setText("Number of Movements: " + eyeball.getCurrentMoveCount());
-        textViewForGoal.setText("Number of Goal(s): " + board.getGoals());
-
+        textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
+        textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()));
     }
 
 //    Task 1, Button for loading a maze
@@ -681,7 +685,6 @@ public class MainActivity extends AppCompatActivity {
 
             loadingDataFromDB();
         } else {
-//          EXTRA VIEW Feature 4, warning sign when it is not during the came or never been saved.
             warningMSG("You can only load the game when its not finished or been saved before");
         }
     }

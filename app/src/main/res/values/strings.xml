@@ -13,8 +13,7 @@
     <string name="game_load">Load</string>
     <string name="stage_one_choose">Stage 1</string>
     <string name="stage_two_choose">Stage 2</string>
-    <!--Was trying to use those way but if i do this, will randomly change and crash the app-->
-    <string name="number_of_goals">Number of Goal(s) : </string>
-    <string name="number_of_movements">Number of Movements : </string>
+    <string name="number_of_goals">Number of Goal(s) : %1$d</string>
+    <string name="number_of_movements">Number of Movements : %1$d</string>
 
 </resources>
