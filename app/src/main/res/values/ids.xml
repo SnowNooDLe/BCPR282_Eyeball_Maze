@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textViewForGoals" type="id"/>
+    <item name="textViewForMovements" type="id"/>
+    <item name="textViewForMovementsLeft" type="id"/>
+    <item name="gamePlayTime" type="id"/>
+</resources>

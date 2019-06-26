@@ -26,6 +26,10 @@
         </activity>
         <activity android:name=".MainActivity"
                   android:parentActivityName=".StartScreen"></activity>
+        <activity android:name=".MainActivityProgrammatically"
+            android:parentActivityName=".StartScreen"></activity>
+        <activity android:name=".Tutorial"
+            android:parentActivityName=".StartScreen"></activity>
     </application>
 
 </manifest>
