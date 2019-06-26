@@ -15,5 +15,6 @@
     <string name="stage_two_choose">Stage 2</string>
     <string name="number_of_goals">Number of Goal(s) : %1$d</string>
     <string name="number_of_movements">Number of Movements : %1$d</string>
+    <string name="movements_left">Movements left : %1$d</string>
 
 </resources>

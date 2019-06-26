@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Board board;
     private ImageView[][] imageViews = new ImageView[6][6];
     private int[][] imageSrcs = new int[6][6];
-    private TextView textViewForGoal, textViewForMovements, textViewForStage;
+    private TextView textViewForGoal, textViewForMovements, textViewForStage, textViewForMovementsLeft;
 
     private Player eyeball;
 //  It means game is not finished yet if it is true.
@@ -45,10 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private int errorCount = 0;
 
 //  for loading & saving game
-    private int currentStage, currentNumOfMovements, currentNumOfGoals, currentEyeballRowPosition, currentEyeballColPosition;
-    private String currentDirection;
-    private Point[] currentMovementHistory;
-    private String[] currentDirectionHistory;
+    private int currentStage ;
+
 //  Time to launch the another activity
     private static int TIME_OUT = 1500;
 //  To store values into those array from DB.
@@ -59,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     private MediaPlayer bgm, lost_case_sound, won_case_sound;
 //    to notify whether game is been saved in firebase
     private boolean gameIsSaved;
+
+    private static int MOVEMENT_LIMIT_STATIC = 10;
+    private int movement_limit = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         textViewForGoal = findViewById(R.id.textViewGoals);
         textViewForMovements = findViewById(R.id.textViewMovements);
         textViewForStage = findViewById(R.id.stageIndicator);
+        textViewForMovementsLeft = findViewById(R.id.movementsLeftIndicator);
 //      As when game starts, it will always start with stage 1
         startGameStageOne();
     }
@@ -148,11 +150,7 @@ public class MainActivity extends AppCompatActivity {
         board.setGoal(0, 3);
         eyeball = new Player(5,2, board);
 
-//      Task 12. Display the number of goals to do
-        textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()));
-//       Task 13. Display move counts
-        textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
-
+        textViewSetup();
 //        for image
         setGoalInMaze(0,3);
         setPlayerInMaze(5,2);
@@ -207,10 +205,7 @@ public class MainActivity extends AppCompatActivity {
         board.setGoal(0, 3);
         eyeball = new Player(5,2, board);
 
-//      Task 12. Display the number of goals to do
-        textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()));
-//       Task 13. Display move counts
-        textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
+        textViewSetup();
 
 //      for image
         setGoalInMaze(0,3);
@@ -234,6 +229,15 @@ public class MainActivity extends AppCompatActivity {
         textViewForStage.setText(R.string.stage_two_choose);
         currentStage = 2;
         stageTwoSetup();
+    }
+
+    public void textViewSetup(){
+//      Task 12. Display the number of goals to do
+        textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()));
+//       Task 13. Display move counts
+        textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
+
+        textViewForMovementsLeft.setText(getString(R.string.movements_left, movement_limit));
     }
 
 //    Extra View Feature 3, choose stages via button click
@@ -311,8 +315,10 @@ public class MainActivity extends AppCompatActivity {
 //              recording direction
                 eyeball.recordDirectionHisory();
 
-//              updating movements display
+
+//              updating textviews display
                 textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
+                textViewForMovementsLeft.setText(getString(R.string.movements_left, movement_limit - eyeball.getCurrentMoveCount()));
             } else {
 //                Extra View Feature 2, getting X sign on the block that user cannot go.
                 Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[targetRow][targetCol]);
@@ -346,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
 //           checking movements to decide whether game should be over or not
-            if (eyeball.getCurrentMoveCount() > 10){
+            if (eyeball.getCurrentMoveCount() > MOVEMENT_LIMIT_STATIC){
 //               Task 16, playing lost sound
                 lost_case_sound = MediaPlayer.create(MainActivity.this,R.raw.lost_sound);
                 lost_case_sound.start();
@@ -472,6 +478,7 @@ public class MainActivity extends AppCompatActivity {
 
 //              update the number of movements as well
                 textViewForMovements.setText(getString(R.string.number_of_movements, eyeball.getCurrentMoveCount()));
+                textViewForMovementsLeft.setText(getString(R.string.movements_left, movement_limit - eyeball.getCurrentMoveCount()));
             }
 
         } else {
