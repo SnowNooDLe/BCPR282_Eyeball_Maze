@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
 //  Time to launch the another activity
     private static int TIME_OUT = 1500;
 //  To store values into those array from DB.
-    private Point[] movementHistoryArray = new Point[11];
-    private String[] directionHistoryArray = new String[11];
+    private Point[] movementHistoryArray = new Point[12];
+    private String[] directionHistoryArray = new String[12];
 
     private Switch soundOnOffSwitch;
     private MediaPlayer bgm;

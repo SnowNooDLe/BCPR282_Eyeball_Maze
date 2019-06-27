@@ -14,8 +14,8 @@ public class Player {
     private int startRow;
     private int startCol;
     private Board board;
-    private Point[] movementHistory = new Point[11];
-    private String[] directionHistory = new String[11];
+    private Point[] movementHistory = new Point[12];
+    private String[] directionHistory = new String[12];
     private boolean gameIsOver;
 
 
