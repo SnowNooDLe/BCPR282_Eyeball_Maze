@@ -429,11 +429,9 @@ public class MainActivity extends AppCompatActivity {
         textViewForGoal.setText(getString(R.string.number_of_goals, board.getGoals()));
     }
     private void resetStageOne(){
-//        board.setGoal(0,3);
         setGoalInMaze(0,3);
     }
     private void resetStageTwo(){
-//        board.setGoal(0,3);
         setGoalInMaze(0,3);
     }
 
