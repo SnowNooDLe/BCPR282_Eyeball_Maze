@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView[][] imageViews = new ImageView[6][6];
     private int[][] imageSrcs = new int[6][6];
     private TextView textViewForGoal, textViewForMovements, textViewForStage;
-    //                Extra View Feature 5, movement left indicator
+    //    Task 4, programmatically, Extra View Feature 5, movement left indicator
     private TextView textViewForTimeTaken;
 
     private Player eyeball;
@@ -71,6 +72,20 @@ public class MainActivity extends AppCompatActivity {
 //      Task 3, Manually create a GUI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//       Task 4, Programmatically done
+        RelativeLayout indicator = findViewById(R.id.indicatorLayout);
+
+        textViewForTimeTaken = new TextView(this);
+        textViewForTimeTaken.setText(R.string.time_taken);
+        textViewForTimeTaken.setId(R.id.gamePlayTime);
+        textViewForTimeTaken.setTextSize(30);
+
+        RelativeLayout.LayoutParams paramsRight = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        paramsRight.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+        textViewForTimeTaken.setLayoutParams(paramsRight);
+
+        indicator.addView(textViewForTimeTaken);
 
 //      Task 14, Display a GUI element to control sound on / off
         soundOnOffSwitch = findViewById(R.id.switchSoundOnOff);
@@ -79,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         textViewForGoal = findViewById(R.id.textViewGoals);
         textViewForMovements = findViewById(R.id.textViewMovements);
         textViewForStage = findViewById(R.id.stageIndicator);
-        textViewForTimeTaken = findViewById(R.id.stopwatch);
 //      As when game starts, it will always start with stage 1
         startGameStageOne();
         soundSetup();

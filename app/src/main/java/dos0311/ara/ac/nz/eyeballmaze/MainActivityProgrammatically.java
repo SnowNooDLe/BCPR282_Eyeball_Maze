@@ -78,6 +78,7 @@ public class MainActivityProgrammatically extends AppCompatActivity {
         stageIndicator = new TextView(this);
         stageIndicator.setText(R.string.stage_one_choose);
         stageIndicator.setId(R.id.stageIndicator);
+        stageIndicator.setTextSize(30);
 
         RelativeLayout.LayoutParams paramsLeft = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         paramsLeft.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -87,6 +88,7 @@ public class MainActivityProgrammatically extends AppCompatActivity {
         gamePlayTime = new TextView(this);
         gamePlayTime.setText(R.string.time_taken);
         gamePlayTime.setId(R.id.gamePlayTime);
+        gamePlayTime.setTextSize(30);
 
         RelativeLayout.LayoutParams paramsRight = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         paramsRight.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);

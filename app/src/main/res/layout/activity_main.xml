@@ -24,13 +24,6 @@
             android:text="@string/stage_one_choose"
             android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/stopwatch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="@string/time_taken"
-            android:textSize="30sp" />
     </RelativeLayout>
 
     <LinearLayout
