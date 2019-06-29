@@ -50,7 +50,7 @@ public class MainActivityProgrammatically extends AppCompatActivity {
     private int errorCount = 0;
 
     //  for loading & saving game
-    private int currentStage ;
+    private int currentStage;
 
     //  Time to launch the another activity
     private static int TIME_OUT = 1500;
@@ -59,7 +59,7 @@ public class MainActivityProgrammatically extends AppCompatActivity {
     private String[] directionHistoryArray = new String[11];
 
     private Switch switchSoundOnOff;
-    private MediaPlayer bgm;
+    private MediaPlayer bgm = null;
     //    to notify whether game is been saved in firebase
     private boolean gameIsSaved;
 
@@ -594,6 +594,26 @@ public class MainActivityProgrammatically extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //    So music will be paused when back button is pressed
+    @Override
+    public void onBackPressed ()
+    {
+        if (bgm != null)
+            bgm.stop();
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onPause ()
+    {
+        if (bgm != null)
+        {
+            bgm.pause();
+            bgm.stop();
+        }
+        super.onPause();
     }
 
     //  Extra View Feature 3, user can select level by clicking this.
