@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] directionHistoryArray = new String[12];
 
     private Switch soundOnOffSwitch;
-    private MediaPlayer bgm = null;
+    private MediaPlayer bgm;
     //    to notify whether game is been saved in firebase
     private boolean gameIsSaved;
 
@@ -114,26 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    //    So music will be paused when back button is pressed
-    @Override
-    public void onBackPressed ()
-    {
-        if (bgm != null)
-            bgm.stop();
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onPause ()
-    {
-        if (bgm != null)
-        {
-            bgm.pause();
-            bgm.stop();
-        }
-        super.onPause();
     }
 
 //  Extra View Feature 3, user can select level by clicking this.

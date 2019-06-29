@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -59,7 +60,7 @@ public class MainActivityProgrammatically extends AppCompatActivity {
     private String[] directionHistoryArray = new String[11];
 
     private Switch switchSoundOnOff;
-    private MediaPlayer bgm = null;
+    private MediaPlayer bgm;
     //    to notify whether game is been saved in firebase
     private boolean gameIsSaved;
 
@@ -594,26 +595,6 @@ public class MainActivityProgrammatically extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    //    So music will be paused when back button is pressed
-    @Override
-    public void onBackPressed ()
-    {
-        if (bgm != null)
-            bgm.stop();
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onPause ()
-    {
-        if (bgm != null)
-        {
-            bgm.pause();
-            bgm.stop();
-        }
-        super.onPause();
     }
 
     //  Extra View Feature 3, user can select level by clicking this.
@@ -1252,6 +1233,7 @@ public class MainActivityProgrammatically extends AppCompatActivity {
         Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
         imageViews[eyeball.getCurrRowPosition()][eyeball.getCurrColPosition()].setImageBitmap(mergedImages);
     }
+
     public void startTimer(){
         handler = new Handler();
         StartTime = SystemClock.uptimeMillis();
