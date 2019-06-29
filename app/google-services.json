@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "672093249648",
+    "firebase_url": "https://bcpr282eyeballmaze.firebaseio.com",
+    "project_id": "bcpr282eyeballmaze",
+    "storage_bucket": "bcpr282eyeballmaze.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672093249648:android:12e3957b4c949472",
+        "android_client_info": {
+          "package_name": "dos0311.ara.ac.nz.eyeballmaze"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "672093249648-c1sc8e46hst30tj9hks71elojt9jq00r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dos0311.ara.ac.nz.eyeballmaze",
+            "certificate_hash": "3682e80400c5030070291de0159bb22537faad54"
+          }
+        },
+        {
+          "client_id": "672093249648-m1jvi0u3hqj61vlivk5prt6kqjlcg94b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8PnnfnciNtmKBc44cDwXsrkPja17xU1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "672093249648-m1jvi0u3hqj61vlivk5prt6kqjlcg94b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
